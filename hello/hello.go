@@ -17,4 +17,5 @@ func main() {
 	fmt.Printf("is %d a odd number? %t\n", int(num), number_utils.IsOdd(int(num)))
 	file_utils.Copy("../file_utils/new_file.txt","../file_utils/file.txt")
 	fmt.Println(string_utils.WordCount("Hello World!! World! I said Hello !!\n"))
+	number_utils.PrintFibonacci()
 }
