@@ -1,4 +1,4 @@
-package stringutil
+package string_utils
 
 func ToUpperCase(s string) string {
 	r := []rune(s)
