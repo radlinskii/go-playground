@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	fmt.Printf(string_utils.Reverse("\n!oG ,olleH"))
-	fmt.Printf(string_utils.ToUpperCase("Hello, Go!\n"))
+	fmt.Printf("reversed message: %s\n", string_utils.Reverse("\n!oG ,olleH"))
+	fmt.Printf("uppercase message: %s\n", string_utils.ToUpperCase("Hello, Go!\n"))
 
 	var num float64 = 3
 	sqrt, diff := number_utils.Sqrt(num)
