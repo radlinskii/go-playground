@@ -35,4 +35,7 @@ func main() {
     if len(os.Args) == 2 {
         file_utils.Write(os.Args[1])
     }
+
+    ipAddr := string_utils.IPAddr{192, 168, 182, 157}
+    fmt.Printf("stringified ip address type: %v", ipAddr)
 }
