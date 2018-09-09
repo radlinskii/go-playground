@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"flag"
 	"github.com/radlinskii/go-playground/string_utils"
 	"github.com/radlinskii/go-playground/number_utils"
 	"github.com/radlinskii/go-playground/file_utils"
@@ -18,4 +19,14 @@ func main() {
 	file_utils.Copy("../file_utils/new_file.txt","../file_utils/file.txt")
 	fmt.Println(string_utils.WordCount("Hello World!! World! I said Hello !!\n"))
 	number_utils.PrintFibonacci()
+
+	var name string
+	flag.StringVar(&name, "name", "", "Who should i greet?")
+    flag.Parse()
+
+    if name == "" {
+        fmt.Println("Hello World!")
+    } else {
+        fmt.Printf("Hello %s!\n", name)
+    }
 }
