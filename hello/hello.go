@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"flag"
+	"os"
 	"github.com/radlinskii/go-playground/string_utils"
 	"github.com/radlinskii/go-playground/number_utils"
 	"github.com/radlinskii/go-playground/file_utils"
@@ -28,5 +29,10 @@ func main() {
         fmt.Println("Hello World!")
     } else {
         fmt.Printf("Hello %s!\n", name)
+    }
+
+
+    if len(os.Args) == 2 {
+        file_utils.Write(os.Args[1])
     }
 }
