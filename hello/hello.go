@@ -1,24 +1,24 @@
 package main
 
 import (
-	"fmt"
-	"flag"
-	"io"
-	"os"
-	"strings"
-	"github.com/radlinskii/go-playground/string_utils"
-	"github.com/radlinskii/go-playground/number_utils"
-	"github.com/radlinskii/go-playground/file_utils"
+    "fmt"
+    "flag"
+    "io"
+    "os"
+    "strings"
+    "github.com/radlinskii/go-playground/string_utils"
+    "github.com/radlinskii/go-playground/number_utils"
+    "github.com/radlinskii/go-playground/file_utils"
 )
 
 func main() {
-	fmt.Printf("reversed message: %s\n", string_utils.Reverse("!oG ,olleH"))
+    fmt.Printf("reversed message: %s\n", string_utils.Reverse("!oG ,olleH"))
 
-	fmt.Printf("uppercase message: %s\n", string_utils.ToUpperCase("Hello, Go!"))
+    fmt.Printf("uppercase message: %s\n", string_utils.ToUpperCase("Hello, Go!"))
 
-	var num float64 = -3
-	sqrt, err := number_utils.Sqrt(num)
-	if err != nil {
+    var num float64 = -3
+    sqrt, err := number_utils.Sqrt(num)
+    if err != nil {
         fmt.Printf("Error: %s", err)
     } else {
         fmt.Printf("my sqrt of %g: %g\n", num, sqrt)
@@ -32,8 +32,8 @@ func main() {
 
     number_utils.PrintFibonacci()
 
-	var name string
-	flag.StringVar(&name, "name", "", "Who should i greet?")
+    var name string
+    flag.StringVar(&name, "name", "", "Who should i greet?")
     flag.Parse()
     if name == "" {
         fmt.Println("Hello World!")
