@@ -52,4 +52,6 @@ func main() {
     r := string_utils.Rot13Reader{s}
     fmt.Print("decoded message: ")
     io.Copy(os.Stdout, &r)
+
+    file_utils.RemoveTabs("../file_utils/file.txt")
 }
