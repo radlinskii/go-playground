@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"flag"
+	"io"
 	"os"
+	"strings"
 	"github.com/radlinskii/go-playground/string_utils"
 	"github.com/radlinskii/go-playground/number_utils"
 	"github.com/radlinskii/go-playground/file_utils"
@@ -44,5 +46,10 @@ func main() {
     }
 
     ipAddr := string_utils.IPAddr{192, 168, 182, 157}
-    fmt.Printf("stringified ip address type: %v", ipAddr)
+    fmt.Printf("stringified ip address type: %v\n", ipAddr)
+
+    s := strings.NewReader("Uryyb Jbeyq!\n")
+    r := string_utils.Rot13Reader{s}
+    fmt.Print("decoded message: ")
+    io.Copy(os.Stdout, &r)
 }
