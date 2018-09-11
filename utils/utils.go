@@ -7,9 +7,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/radlinskii/go-playground/file_utils"
-	"github.com/radlinskii/go-playground/number_utils"
-	"github.com/radlinskii/go-playground/string_utils"
+	"github.com/radlinskii/go-playground/utils/file_utils"
+	"github.com/radlinskii/go-playground/utils/number_utils"
+	"github.com/radlinskii/go-playground/utils/string_utils"
 )
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
 
 	fmt.Printf("is %d a odd number? %t\n", int(num), number_utils.IsOdd(int(num)))
 
-	file_utils.Copy("../file_utils/new_file.txt", "../file_utils/file.txt")
+	file_utils.Copy("./file_utils/new_file.txt", "./file_utils/file.txt")
 
 	fmt.Println(string_utils.WordCount("Hello World!! World! I said Hello !!\n"))
 
@@ -54,5 +54,5 @@ func main() {
 	fmt.Print("decoded message: ")
 	io.Copy(os.Stdout, &r)
 
-	file_utils.RemoveTabs("../file_utils/file.txt")
+	file_utils.RemoveTabs("./file_utils/file.txt")
 }
