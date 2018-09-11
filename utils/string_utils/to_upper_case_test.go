@@ -4,10 +4,10 @@ import "testing"
 
 func TestToUpperCase(t *testing.T) {
 	var tests = map[string]string{
-		"":        "",
-		"aaa":     "AAA",
-		"ab!1$5c": "AB!1$5C",
-		" ba ":    " BA ",
+		"":               "",
+		"aaa":            "AAA",
+		"string":         "STRING",
+		" hello tests! ": " HELLO TESTS! ",
 	}
 
 	for key, expectedVal := range tests {

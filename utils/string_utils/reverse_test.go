@@ -4,10 +4,10 @@ import "testing"
 
 func TestReverse(t *testing.T) {
 	var tests = map[string]string{
-		"":     "",
-		"aaa":  "aaa",
-		"abc":  "cba",
-		" ba ": " ab ",
+		"":         "",
+		"aaa":      "aaa",
+		"msg":      "gsm",
+		" string ": " gnirts ",
 	}
 
 	for key, expectedVal := range tests {
