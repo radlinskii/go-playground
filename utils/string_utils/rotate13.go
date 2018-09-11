@@ -17,6 +17,7 @@ func rotate13(b byte) byte {
 	return b
 }
 
+// Read method is provided to implicitly implement the Reader interface to Rot13Reader type.
 func (r13 *Rot13Reader) Read(s []byte) (n int, err error) {
 	n, err = r13.R.Read(s)
 
