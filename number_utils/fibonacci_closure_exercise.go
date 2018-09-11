@@ -14,7 +14,7 @@ func fibonacci() func() int {
 
 func PrintFibonacci() {
 	f := fibonacci()
-	fmt.Print("first 10 of fibonacci numbers: ")
+	fmt.Print("first 10 of Fibonacci numbers: ")
 	for i := 0; i < 10; i++ {
 		fmt.Printf("%d ", f())
 	}
