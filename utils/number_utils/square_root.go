@@ -2,9 +2,9 @@ package number_utils
 
 import "fmt"
 
-type errNegativeSqrt float64
+type ErrNegativeSqrt float64
 
-func (e errNegativeSqrt) Error() string {
+func (e ErrNegativeSqrt) Error() string {
 	return fmt.Sprintf("cannot Sqrt negative number: %g\n", float64(e))
 }
 
@@ -12,7 +12,7 @@ func (e errNegativeSqrt) Error() string {
 // If given negative number it returns an error.
 func Sqrt(x float64) (float64, error) {
 	if x < 0 {
-		return 0, errNegativeSqrt(x)
+		return 0, ErrNegativeSqrt(x)
 	} else {
 		z := float64(x)
 		for i := 0; i < 100; i++ {
