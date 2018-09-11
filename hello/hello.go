@@ -3,12 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/radlinskii/go-playground/file_utils"
-	"github.com/radlinskii/go-playground/number_utils"
-	"github.com/radlinskii/go-playground/string_utils"
 	"io"
 	"os"
 	"strings"
+
+	"github.com/radlinskii/go-playground/file_utils"
+	"github.com/radlinskii/go-playground/number_utils"
+	"github.com/radlinskii/go-playground/string_utils"
 )
 
 func main() {
