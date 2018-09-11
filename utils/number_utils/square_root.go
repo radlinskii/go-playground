@@ -8,6 +8,8 @@ func (e ErrNegativeSqrt) Error() string {
 	return fmt.Sprintf("cannot Sqrt negative number: %g\n", float64(e))
 }
 
+// Sqrt calculates the square root of a number.
+// If given negative number it returns an error.
 func Sqrt(x float64) (float64, error) {
 	if x < 0 {
 		return 0, ErrNegativeSqrt(x)

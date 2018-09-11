@@ -2,6 +2,8 @@ package string_utils
 
 import "io"
 
+// Rot13Reader is a simple structure that implements Reader interface.
+// While read its encoding its content with ROT13 cipher.
 type Rot13Reader struct {
 	R io.Reader
 }

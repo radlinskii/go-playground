@@ -12,6 +12,7 @@ func fibonacci() func() int {
 	}
 }
 
+// PrintFibonacci prints first 10 Fibonacci numbers.
 func PrintFibonacci() {
 	f := fibonacci()
 	fmt.Print("first 10 of Fibonacci numbers: ")

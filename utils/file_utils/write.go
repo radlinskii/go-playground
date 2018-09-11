@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// Write writes "Hello Writing to Files!\n" string to a given file.
 func Write(filename string) {
 	file, err := os.Create(filename)
 	if err != nil {

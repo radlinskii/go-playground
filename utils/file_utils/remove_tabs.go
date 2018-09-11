@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// RemoveTabs removes tabulation character from specified file and replaces them with 4 space character.
 func RemoveTabs(filename string) {
 	input, err := ioutil.ReadFile(filename)
 	if err != nil {

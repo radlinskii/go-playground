@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// Copy copies content of source file to destination file.
 func Copy(dstName, srcName string) (written int64, err error) {
 	src, err := os.Open(srcName)
 	if err != nil {
