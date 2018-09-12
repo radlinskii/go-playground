@@ -12,9 +12,9 @@ func TestSqrt(t *testing.T) {
 		expected float64
 	}{
 		{"positive number #1", 13, math.Sqrt(13)},
-		{"positive number #2", 31, math.Sqrt(31)},
+		{"positive number #2", 31.1, math.Sqrt(31.1)},
 		{"zero", 0, 0},
-		{"negative number #1", -11, 0},
+		{"negative number #1", -11.98, 0},
 		{"negative number #2", -1, 0},
 	}
 	precision := 0.00000001
@@ -41,9 +41,9 @@ func TestSqrt2(t *testing.T) {
 		number float64
 	}{
 		{"positive number #1", 13},
-		{"positive number #2", 31},
+		{"positive number #2", 31.1},
 		{"zero", 0},
-		{"negative number #1", -11},
+		{"negative number #1", -11.98},
 		{"negative number #2", -1},
 	}
 
@@ -71,9 +71,9 @@ func TestErrNegativeSqrt_Error(t *testing.T) {
 		expected string
 	}{
 		{"positive number #1", 13, "cannot Sqrt negative number: 13"},
-		{"positive number #2", 31, "cannot Sqrt negative number: 31"},
+		{"positive number #2", 31.1, "cannot Sqrt negative number: 31"},
 		{"zero", 0, "cannot Sqrt negative number: 0"},
-		{"negative number #1", -11, "cannot Sqrt negative number: -11"},
+		{"negative number #1", -11.98, "cannot Sqrt negative number: -11"},
 		{"negative number #2", -1, "cannot Sqrt negative number: -1"},
 	}
 	for _, test := range testsTable {
