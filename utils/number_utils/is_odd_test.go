@@ -3,23 +3,25 @@ package number_utils
 import "testing"
 
 func TestIsOdd(t *testing.T) {
-	var tests = map[int]bool{
-		3: true,
-		2: false,
-		1: true,
-		0: false,
-		4: false,
-		5: true,
+	var testsTable = []struct {
+		name     string
+		number   int
+		expected bool
+	}{
+		{"positive odd number", 13, true},
+		{"positive even number", 32, false},
+		{"zero", 0, false},
+		{"negative odd number", -11, true},
+		{"negative even number", -44, false},
 	}
 
-	for key, expectedVal := range tests {
-		val := IsOdd(key)
-		if val != expectedVal {
-			t.Error(
-				"For", key,
-				"expected", expectedVal,
-				"got", val,
-			)
-		}
+	for _, test := range testsTable {
+		t.Run(test.name, func(t *testing.T) {
+			got := IsOdd(test.number)
+			if got != test.expected {
+				t.Errorf("\nIsOdd(%d) \nexpected: %t \ngot: %t", test.number, got, test.expected)
+			}
+
+		})
 	}
 }
