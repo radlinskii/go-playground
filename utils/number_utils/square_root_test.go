@@ -80,7 +80,7 @@ func TestErrNegativeSqrt_Error(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			got := ErrNegativeSqrt(test.number).Error()
 			if got != test.expected {
-				t.Errorf("\nSqrt(%g): \nexpected: <nil> \ngot: %v", test.number, got)
+				t.Errorf("\nErrNegativeSqrt(%g).Error(): \nexpected: <nil> \ngot: %v", test.number, got)
 			}
 		})
 	}
