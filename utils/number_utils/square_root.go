@@ -13,6 +13,8 @@ func (e ErrNegativeSqrt) Error() string {
 func Sqrt(x float64) (float64, error) {
 	if x < 0 {
 		return 0, ErrNegativeSqrt(x)
+	} else if x == 0 {
+		return 0, nil
 	} else {
 		z := float64(x)
 		for i := 0; i < 100; i++ {
