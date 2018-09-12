@@ -21,7 +21,6 @@ func TestIsOdd(t *testing.T) {
 			if got != test.expected {
 				t.Errorf("\nIsOdd(%d) \nexpected: %t \ngot: %t", test.number, got, test.expected)
 			}
-
 		})
 	}
 }
