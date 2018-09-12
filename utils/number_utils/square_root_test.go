@@ -35,7 +35,7 @@ func TestSqrt(t *testing.T) {
 	}
 }
 
-func TestErrNegativeSqrt_Error(t *testing.T) {
+func TestSqrt2(t *testing.T) {
 	testsTable := []struct {
 		name   string
 		number float64
@@ -59,6 +59,28 @@ func TestErrNegativeSqrt_Error(t *testing.T) {
 				if err != ErrNegativeSqrt(test.number) {
 					t.Errorf("\nSqrt(%g): \nexpected: %v \ngot: %v", test.number, ErrNegativeSqrt(test.number), err)
 				}
+			}
+		})
+	}
+}
+
+func TestErrNegativeSqrt_Error(t *testing.T) {
+	testsTable := []struct {
+		name     string
+		number   float64
+		expected string
+	}{
+		{"positive number #1", 13, "cannot Sqrt negative number: 13"},
+		{"positive number #2", 31, "cannot Sqrt negative number: 31"},
+		{"zero", 0, "cannot Sqrt negative number: 0"},
+		{"negative number #1", -11, "cannot Sqrt negative number: -11"},
+		{"negative number #2", -1, "cannot Sqrt negative number: -1"},
+	}
+	for _, test := range testsTable {
+		t.Run(test.name, func(t *testing.T) {
+			got := ErrNegativeSqrt(test.number).Error()
+			if got != test.expected {
+				t.Errorf("\nSqrt(%g): \nexpected: <nil> \ngot: %v", test.number, got)
 			}
 		})
 	}
