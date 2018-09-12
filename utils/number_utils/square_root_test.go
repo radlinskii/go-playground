@@ -71,9 +71,9 @@ func TestErrNegativeSqrt_Error(t *testing.T) {
 		expected string
 	}{
 		{"positive number #1", 13, "cannot Sqrt negative number: 13"},
-		{"positive number #2", 31.1, "cannot Sqrt negative number: 31"},
+		{"positive number #2", 31.1, "cannot Sqrt negative number: 31.1"},
 		{"zero", 0, "cannot Sqrt negative number: 0"},
-		{"negative number #1", -11.98, "cannot Sqrt negative number: -11"},
+		{"negative number #1", -11.98, "cannot Sqrt negative number: -11.98"},
 		{"negative number #2", -1, "cannot Sqrt negative number: -1"},
 	}
 	for _, test := range testsTable {
