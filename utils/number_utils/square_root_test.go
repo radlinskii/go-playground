@@ -29,3 +29,30 @@ func TestSqrt(t *testing.T) {
 		}
 	}
 }
+
+func TestErrNegativeSqrt_Error(t *testing.T) {
+	tests := [8]float64{-3.5, -3.4, -2, -1, 0, 1, 2, 5}
+
+	for _, testNumber := range tests {
+		_, err := Sqrt(testNumber)
+
+		if testNumber < 0 {
+			_, ok := err.(ErrNegativeSqrt)
+			if !ok {
+				t.Error(
+					"For", testNumber,
+					"expected ErrNegativeSqrt",
+					"got", err,
+				)
+			}
+		} else {
+			if err != nil {
+				t.Error(
+					"For", testNumber,
+					"expected <nil>",
+					"got", err,
+				)
+			}
+		}
+	}
+}
