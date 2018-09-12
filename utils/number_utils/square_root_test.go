@@ -24,11 +24,11 @@ func TestSqrt(t *testing.T) {
 			got, _ := Sqrt(test.number)
 			if test.number > 0 {
 				if got < test.expected-precision || got > test.expected+precision {
-					t.Errorf("Sqrt(%g) got %g expected %g", test.number, got, test.expected)
+					t.Errorf("\nSqrt(%g) \nexpected: %g \ngot: %g", test.number, test.expected, got)
 				}
 			} else {
 				if got != test.expected {
-					t.Errorf("Sqrt(%g) got %g expected %g", test.number, got, test.expected)
+					t.Errorf("\nSqrt(%g) \nexpected: %g \ngot: %g", test.number, test.expected, got)
 				}
 			}
 		})
@@ -53,11 +53,11 @@ func TestErrNegativeSqrt_Error(t *testing.T) {
 
 			if test.number >= 0 {
 				if err != nil {
-					t.Errorf("For %g expected <nil> got %v", test.number, err)
+					t.Errorf("\nSqrt(%g): \nexpected: <nil> \ngot: %v", test.number, err)
 				}
 			} else {
 				if err != ErrNegativeSqrt(test.number) {
-					t.Errorf("For %g expected %v got %v", test.number, ErrNegativeSqrt(test.number), err)
+					t.Errorf("\nSqrt(%g): \nexpected: %v \ngot: %v", test.number, ErrNegativeSqrt(test.number), err)
 				}
 			}
 		})
