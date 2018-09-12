@@ -5,7 +5,7 @@ import "fmt"
 type ErrNegativeSqrt float64
 
 func (e ErrNegativeSqrt) Error() string {
-	return fmt.Sprintf("cannot Sqrt negative number: %g\n", float64(e))
+	return fmt.Sprintf("cannot Sqrt negative number: %g", float64(e))
 }
 
 // Sqrt calculates the square root of a number.
