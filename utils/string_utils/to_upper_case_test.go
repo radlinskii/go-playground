@@ -3,21 +3,24 @@ package string_utils
 import "testing"
 
 func TestToUpperCase(t *testing.T) {
-	var tests = map[string]string{
-		"":               "",
-		"aaa":            "AAA",
-		"string":         "STRING",
-		" hello tests! ": " HELLO TESTS! ",
+	var testsTable = []struct {
+		name string
+		string
+		expected string
+	}{
+		{"empty string", "", ""},
+		{"word", "test", "TEST"},
+		{"uppercase word", "LEVEL", "LEVEL"},
+		{"string with spaces", "fat cat", "FAT CAT"},
+		{"string with non-alphabetic characters", "#leet!!1", "#LEET!!1"},
 	}
 
-	for key, expectedVal := range tests {
-		val := ToUpperCase(key)
-		if val != expectedVal {
-			t.Error(
-				"For", key,
-				"expected", expectedVal,
-				"got", val,
-			)
-		}
+	for _, test := range testsTable {
+		t.Run(test.name, func(t *testing.T) {
+			got := ToUpperCase(test.string)
+			if got != test.expected {
+				t.Errorf("\nToUpperCase(%s) \nexpected: %s \ngot: %s", test.string, got, test.expected)
+			}
+		})
 	}
 }
