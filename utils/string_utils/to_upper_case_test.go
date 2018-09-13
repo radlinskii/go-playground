@@ -19,7 +19,7 @@ func TestToUpperCase(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			got := ToUpperCase(test.string)
 			if got != test.expected {
-				t.Errorf("\nToUpperCase(%s) \nexpected: %s \ngot: %s", test.string, got, test.expected)
+				t.Errorf("\nToUpperCase(%s) \nexpected: %s \ngot: %s", test.string, test.expected, got)
 			}
 		})
 	}

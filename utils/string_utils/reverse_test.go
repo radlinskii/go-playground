@@ -19,7 +19,7 @@ func TestReverse(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			got := Reverse(test.string)
 			if got != test.expected {
-				t.Errorf("\nReverse(%s) \nexpected: %s \ngot: %s", test.string, got, test.expected)
+				t.Errorf("\nReverse(%s) \nexpected: %s \ngot: %s", test.string, test.expected, got)
 			}
 		})
 	}

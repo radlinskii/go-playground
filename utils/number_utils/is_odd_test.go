@@ -19,7 +19,7 @@ func TestIsOdd(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			got := IsOdd(test.number)
 			if got != test.expected {
-				t.Errorf("\nIsOdd(%d) \nexpected: %t \ngot: %t", test.number, got, test.expected)
+				t.Errorf("\nIsOdd(%d) \nexpected: %t \ngot: %t", test.number, test.expected, got)
 			}
 		})
 	}

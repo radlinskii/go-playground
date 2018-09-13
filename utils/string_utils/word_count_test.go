@@ -23,7 +23,7 @@ func TestWordCount(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			got := WordCount(test.string)
 			if !reflect.DeepEqual(got, test.expected) {
-				t.Errorf("\nWordCount(%s) \nexpected: %v \ngot: %v", test.string, got, test.expected)
+				t.Errorf("\nWordCount(%s) \nexpected: %v \ngot: %v", test.string, test.expected, got)
 			}
 		})
 	}
