@@ -17,9 +17,6 @@ func main() {
 		file_utils.Write(os.Args[1])
 	}
 
-	ipAddr := string_utils.IPAddr{192, 168, 182, 157}
-	fmt.Printf("stringified ip address type: %v\n", ipAddr)
-
 	s := strings.NewReader("Uryyb Jbeyq!\n")
 	r := string_utils.Rot13Reader{s}
 	fmt.Print("decoded message: ")
