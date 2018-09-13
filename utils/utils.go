@@ -1,13 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"io"
 	"os"
-	"strings"
 
 	"github.com/radlinskii/go-playground/utils/file_utils"
-	"github.com/radlinskii/go-playground/utils/string_utils"
 )
 
 func main() {
@@ -16,11 +12,6 @@ func main() {
 	if len(os.Args) == 2 {
 		file_utils.Write(os.Args[1])
 	}
-
-	s := strings.NewReader("Uryyb Jbeyq!\n")
-	r := string_utils.Rot13Reader{s}
-	fmt.Print("decoded message: ")
-	io.Copy(os.Stdout, &r)
 
 	file_utils.RemoveTabs("./file_utils/file.txt")
 }
