@@ -5,16 +5,26 @@ import (
 	"testing"
 )
 
-func ExamplePrintRot13Encoded() {
-	PrintRot13Encoded("")
-	PrintRot13Encoded("\n")
-	PrintRot13Encoded("hello\n")
-	PrintRot13Encoded("HELLO\n")
-	PrintRot13Encoded("Hello!\n")
-	// Output:
-	// uryyb
-	// URYYB
-	// Uryyb!
+func TestEncodeROT13(t *testing.T) {
+	var testsTable = []struct {
+		name string
+		string
+		expected string
+	}{
+		{"empty string", "", ""},
+		{"word", "hello", "uryyb"},
+		{"string with capital letters", "HellO", "UryyB"},
+		{"string with non-alphabetic characters", "Hello World!", "Uryyb Jbeyq!"},
+	}
+
+	for _, test := range testsTable {
+		t.Run(test.name, func(t *testing.T) {
+			got := EncodeROT13(test.string)
+			if got != test.expected {
+				t.Errorf("\nEncodeROT13(%v) \nexpected: %s \ngot: %s", test.string, test.expected, got)
+			}
+		})
+	}
 }
 
 func TestRot13Reader_Read(t *testing.T) {
@@ -25,7 +35,7 @@ func TestRot13Reader_Read(t *testing.T) {
 	}{
 		{"empty strings.Reader", &strings.Reader{}, 0},
 		{"strings.Reader with word", strings.NewReader("hello"), 5},
-		{"strings.Reader with two words", strings.NewReader("hello world"), 11},
+		{"strings.Reader with capital letters", strings.NewReader("HellO"), 5},
 		{"strings.Reader with non-alphabetic characters", strings.NewReader("Hello World!"), 12},
 	}
 
