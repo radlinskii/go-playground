@@ -5,10 +5,14 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"path/filepath"
 	"regexp"
 )
 
-var templates = template.Must(template.ParseFiles("edit.html", "view.html"))
+var templates = template.Must(
+	template.ParseFiles(
+		filepath.Join("tmpl", "edit.html"),
+		filepath.Join("tmpl", "view.html")))
 var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
 
 type Page struct {
@@ -17,12 +21,12 @@ type Page struct {
 }
 
 func (p *Page) save() error {
-	filename := p.Title + ".txt"
+	filename := filepath.Join("data", p.Title+".txt")
 	return ioutil.WriteFile(filename, p.Body, 0600)
 }
 
 func loadPage(title string) (*Page, error) {
-	filename := title + ".txt"
+	filename := filepath.Join("data", title+".txt")
 	body, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
