@@ -1,8 +1,8 @@
 package number_utils
 
-import "fmt"
+// TODO handle n == 0 && n < 0
 
-func fibonacciWithClosure() func() int {
+func getFibonacciWithClosure() func() int {
 	i, a, b := 0, 0, 1
 	return func() int {
 		i = a
@@ -12,17 +12,20 @@ func fibonacciWithClosure() func() int {
 	}
 }
 
-// PrintFibonacciWithClosure prints first 10 Fibonacci numbers, implemented using closures.
-func PrintFibonacciWithClosure() {
-	f := fibonacciWithClosure()
-	fmt.Print("first 10 of Fibonacci numbers: ")
-	for i := 0; i < 10; i++ {
-		fmt.Printf("%d ", f())
+// FibonacciWithClosure returns a slice of first n Fibonacci numbers
+// implemented using closures.
+func FibonacciWithClosure(n int) []int {
+	s := make([]int, n)
+
+	f := getFibonacciWithClosure()
+
+	for i := 0; i < n; i++ {
+		s = append(s, f())
 	}
-	fmt.Print("\n")
+	return s
 }
 
-func fibonacciWithChannel(n int, c chan int) {
+func getFibonacciWithChannel(n int, c chan int) {
 	x, y := 0, 1
 	for i := 0; i < n; i++ {
 		c <- x
@@ -31,14 +34,16 @@ func fibonacciWithChannel(n int, c chan int) {
 	close(c)
 }
 
-// PrintFibonacciWithChannel prints first 10 Fibonacci numbers, implemented using goroutine & channel.
-func PrintFibonacciWithChannel() {
-	c := make(chan int, 10)
-	go fibonacciWithChannel(cap(c), c)
+// FibonacciWithChannel returns a slice of first n Fibonacci numbers
+// implemented using goroutine & channel.
+func FibonacciWithChannel(n int) []int {
+	s := make([]int, n)
+	c := make(chan int, n)
 
-	fmt.Print("first 10 of Fibonacci numbers: ")
+	go getFibonacciWithChannel(cap(c), c)
+
 	for i := range c {
-		fmt.Printf("%d ", i)
+		s = append(s, i)
 	}
-	fmt.Print("\n")
+	return s
 }
