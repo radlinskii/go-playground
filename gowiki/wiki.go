@@ -1,12 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 )
 
 var templates = template.Must(
@@ -14,15 +17,42 @@ var templates = template.Must(
 		filepath.Join("tmpl", "edit.html"),
 		filepath.Join("tmpl", "view.html")))
 var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
+var validDataPath = regexp.MustCompile("^data/([a-zA-Z0-9]+).txt$")
 
 type Page struct {
-	Title string
-	Body  []byte
+	Title    string
+	Body     []byte
+	HTMLBody template.HTML
 }
 
 func (p *Page) save() error {
 	filename := filepath.Join("data", p.Title+".txt")
 	return ioutil.WriteFile(filename, p.Body, 0600)
+}
+
+func (p *Page) parseLinks() {
+	titles := getPagesTitles()
+	for i := range titles {
+		p.Body = []byte(strings.Replace(string(p.Body), titles[i], "<a href=\"/view/"+titles[i]+"\">"+titles[i]+"</a>", -1))
+	}
+	p.HTMLBody = template.HTML(p.Body)
+}
+
+func getPagesTitles() []string {
+	var files []string
+
+	root := "data"
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		m := validDataPath.FindStringSubmatch(path)
+		if len(m) > 1 {
+			files = append(files, m[1])
+		}
+		return nil
+	})
+	if err != nil {
+		fmt.Println(err)
+	}
+	return files
 }
 
 func loadPage(title string) (*Page, error) {
@@ -47,6 +77,7 @@ func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
 		http.Redirect(w, r, "/edit/"+title, http.StatusFound)
 		return
 	}
+	p.parseLinks()
 	renderTemplate(w, "view", p)
 }
 
