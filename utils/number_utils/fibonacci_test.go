@@ -11,7 +11,9 @@ func TestFibonacciWithClosure(t *testing.T) {
 		amountOfNumbers int
 		expected        []int
 	}{
-		{"no items", 0, nil},
+		{"negative amount of numbers #1", -24, []int{}},
+		{"negative amount of numbers #2", -1, []int{}},
+		{"no items", 0, []int{}},
 		{"1 item", 1, []int{0}},
 		{"2 items", 2, []int{0, 1}},
 		{"3 items", 3, []int{0, 1, 1}},
@@ -23,9 +25,19 @@ func TestFibonacciWithClosure(t *testing.T) {
 
 	for _, test := range testsTable {
 		t.Run(test.name, func(t *testing.T) {
-			got := FibonacciWithClosure(test.amountOfNumbers)
-			if reflect.DeepEqual(got, test.expected) {
+			got, err := FibonacciWithClosure(test.amountOfNumbers)
+			if !reflect.DeepEqual(got, test.expected) {
 				t.Errorf("\nFibonacciWithClosure(%d) \nexpected: %v \ngot: %v", test.amountOfNumbers, test.expected, got)
+			}
+			if test.amountOfNumbers >= 0 {
+				if err != nil {
+					t.Errorf("\nFibonacciWithClosure(%d) \nexpected: %v \ngot: %v", test.amountOfNumbers, nil, err)
+				}
+			} else {
+				if _, ok := err.(errNegativeAmount); !ok {
+					t.Errorf("\nFibonacciWithClosure(%d) \nexpected: %v \ngot: %v",
+						test.amountOfNumbers, errNegativeAmount(test.amountOfNumbers), err)
+				}
 			}
 		})
 	}
@@ -37,7 +49,9 @@ func TestFibonacciWithChannel(t *testing.T) {
 		amountOfNumbers int
 		expected        []int
 	}{
-		{"no items", 0, nil},
+		{"negative amount of numbers #1", -24, []int{}},
+		{"negative amount of numbers #2", -1, []int{}},
+		{"no items", 0, []int{}},
 		{"1 item", 1, []int{0}},
 		{"2 items", 2, []int{0, 1}},
 		{"3 items", 3, []int{0, 1, 1}},
@@ -49,9 +63,42 @@ func TestFibonacciWithChannel(t *testing.T) {
 
 	for _, test := range testsTable {
 		t.Run(test.name, func(t *testing.T) {
-			got := FibonacciWithChannel(test.amountOfNumbers)
-			if reflect.DeepEqual(got, test.expected) {
+			got, err := FibonacciWithChannel(test.amountOfNumbers)
+			if !reflect.DeepEqual(got, test.expected) {
 				t.Errorf("\nFibonacciWithChannel(%d) \nexpected: %v \ngot: %v", test.amountOfNumbers, test.expected, got)
+			}
+			if test.amountOfNumbers >= 0 {
+				if err != nil {
+					t.Errorf("\nFibonacciWithChannel(%d) \nexpected: %v \ngot: %v", test.amountOfNumbers, nil, err)
+				}
+			} else {
+				if _, ok := err.(errNegativeAmount); !ok {
+					t.Errorf("\nFibonacciWithChannel(%d) \nexpected: %v \ngot: %v",
+						test.amountOfNumbers, errNegativeAmount(test.amountOfNumbers), err)
+				}
+			}
+		})
+	}
+}
+
+func TestErrNegativeAmount_Error(t *testing.T) {
+	testsTable := []struct {
+		name     string
+		number   float64
+		expected string
+	}{
+		{"negative amount of numbers #1", -39, "cannot operate on negative amount of numbers: -39"},
+		{"negative amount of numbers #2", -24, "cannot operate on negative amount of numbers: -24"},
+		{"negative amount of numbers #3", -1, "cannot operate on negative amount of numbers: -1"},
+		{"no items", 0, "cannot operate on negative amount of numbers: 0"},
+		{"1 item", 1, "cannot operate on negative amount of numbers: 1"},
+		{"7 items", 7, "cannot operate on negative amount of numbers: 7"},
+	}
+	for _, test := range testsTable {
+		t.Run(test.name, func(t *testing.T) {
+			got := errNegativeAmount(test.number).Error()
+			if got != test.expected {
+				t.Errorf("\nErrNegativeSqrt(%g).Error(): \nexpected: <nil> \ngot: %v", test.number, got)
 			}
 		})
 	}
