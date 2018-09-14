@@ -19,22 +19,22 @@ func TestCopy(t *testing.T) {
 	for _, test := range testsTable {
 		t.Run(test.name, func(t *testing.T) {
 			input := filepath.Join("testdata", test.fileName+".input")
-			golden := filepath.Join("testdata", test.fileName+".golden")
+			output := filepath.Join("testdata", test.fileName+".output")
 
-			// Reading expected output from .golden file
-			expected, err := ioutil.ReadFile(golden)
+			// Reading expected output from .output file
+			expected, err := ioutil.ReadFile(output)
 			if err != nil {
-				t.Fatalf("failed reading golden file: %s", err)
+				t.Fatalf("failed reading output file: %s", err)
 			}
 
-			// Using Copy function to copy content of .input file to .golden file
-			_, err = Copy(input, golden)
+			// Using Copy function to copy content of .input file to .output file
+			_, err = Copy(input, output)
 			if err != nil {
 				t.Fatalf("failed copying file: %s", err)
 			}
 
-			// Reading output from .golden file
-			actual, err := ioutil.ReadFile(golden)
+			// Reading output from .output file
+			actual, err := ioutil.ReadFile(output)
 			if err != nil {
 				t.Fatalf("failed reading output: %s", err)
 			}
@@ -44,10 +44,10 @@ func TestCopy(t *testing.T) {
 				t.Errorf("\nCopy(%s) \nexpected: %s \ngot: %s", input, expected, actual)
 			}
 
-			// Writing expected output back to .golden file
-			err = ioutil.WriteFile(golden, expected, 0644)
+			// Writing expected output back to .output file
+			err = ioutil.WriteFile(output, expected, 0644)
 			if err != nil {
-				t.Fatalf("failed writing expected output back to golden file: %s", err)
+				t.Fatalf("failed writing expected output back to output file: %s", err)
 			}
 		})
 	}
