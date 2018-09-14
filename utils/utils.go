@@ -7,8 +7,6 @@ import (
 )
 
 func main() {
-	file_utils.Copy("./file_utils/new_file.txt", "./file_utils/file.txt")
-
 	if len(os.Args) == 2 {
 		file_utils.Write(os.Args[1])
 	}
