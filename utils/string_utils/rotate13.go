@@ -1,8 +1,8 @@
 package string_utils
 
 import (
+	"bytes"
 	"io"
-	"os"
 	"strings"
 )
 
@@ -20,7 +20,7 @@ func rotate13(b byte) byte {
 }
 
 // Read method is provided to implicitly implement the Reader interface to Rot13Reader type.
-func (r13 *rot13Reader) Read(s []byte) (n int, err error) {
+func (r13 rot13Reader) Read(s []byte) (n int, err error) {
 	n, err = r13.R.Read(s)
 
 	for i := 0; i < len(s); i++ {
@@ -29,9 +29,11 @@ func (r13 *rot13Reader) Read(s []byte) (n int, err error) {
 	return
 }
 
-// PrintRot13Encode gets a string and prints its content encoded with ROT13 cipher
-func PrintRot13Encoded(s string) {
+// EncodeROT13 gets a string and returns its content encoded with ROT13 cipher
+func EncodeROT13(s string) string {
 	r := strings.NewReader(s)
 	r13 := rot13Reader{r}
-	io.Copy(os.Stdout, &r13)
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(r13)
+	return buf.String()
 }
