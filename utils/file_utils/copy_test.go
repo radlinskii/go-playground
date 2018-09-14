@@ -18,15 +18,17 @@ func TestCopy(t *testing.T) {
 
 	for _, test := range testsTable {
 		t.Run(test.name, func(t *testing.T) {
-			// Reading expected output from .golden file
+			input := filepath.Join("testdata", test.fileName+".input")
 			golden := filepath.Join("testdata", test.fileName+".golden")
+
+			// Reading expected output from .golden file
 			expected, err := ioutil.ReadFile(golden)
 			if err != nil {
 				t.Fatalf("failed reading golden file: %s", err)
 			}
 
 			// Using Copy function to copy content of .input file to .golden file
-			_, err = Copy(filepath.Join("testdata", test.fileName+".input"), golden)
+			_, err = Copy(input, golden)
 			if err != nil {
 				t.Fatalf("failed copying file: %s", err)
 			}
@@ -39,7 +41,7 @@ func TestCopy(t *testing.T) {
 
 			// Testing if expected output matches actual output
 			if !bytes.Equal(actual, expected) {
-				t.Errorf("\nCopy(%s) \nexpected: %s \ngot: %s", test.fileName, expected, actual)
+				t.Errorf("\nCopy(%s) \nexpected: %s \ngot: %s", input, expected, actual)
 			}
 
 			// Writing expected output back to .golden file
