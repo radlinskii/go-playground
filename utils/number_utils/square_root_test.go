@@ -56,8 +56,8 @@ func TestSqrt2(t *testing.T) {
 					t.Errorf("\nSqrt(%g): \nexpected: <nil> \ngot: %v", test.number, err)
 				}
 			} else {
-				if err != ErrNegativeSqrt(test.number) {
-					t.Errorf("\nSqrt(%g): \nexpected: %v \ngot: %v", test.number, ErrNegativeSqrt(test.number), err)
+				if err != errNegativeSqrt(test.number) {
+					t.Errorf("\nSqrt(%g): \nexpected: %v \ngot: %v", test.number, errNegativeSqrt(test.number), err)
 				}
 			}
 		})
@@ -78,7 +78,7 @@ func TestErrNegativeSqrt_Error(t *testing.T) {
 	}
 	for _, test := range testsTable {
 		t.Run(test.name, func(t *testing.T) {
-			got := ErrNegativeSqrt(test.number).Error()
+			got := errNegativeSqrt(test.number).Error()
 			if got != test.expected {
 				t.Errorf("\nErrNegativeSqrt(%g).Error(): \nexpected: <nil> \ngot: %v", test.number, got)
 			}
