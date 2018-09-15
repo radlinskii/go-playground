@@ -1,4 +1,4 @@
-package number_utils
+package numutils
 
 import (
 	"reflect"

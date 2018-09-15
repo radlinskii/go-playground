@@ -1,4 +1,4 @@
-package string_utils
+package strutils
 
 import "fmt"
 
