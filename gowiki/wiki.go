@@ -19,18 +19,18 @@ var templates = template.Must(
 var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
 var validDataPath = regexp.MustCompile("^data/([a-zA-Z0-9]+).txt$")
 
-type Page struct {
+type page struct {
 	Title    string
 	Body     []byte
 	HTMLBody template.HTML
 }
 
-func (p *Page) save() error {
+func (p *page) save() error {
 	filename := filepath.Join("data", p.Title+".txt")
 	return ioutil.WriteFile(filename, p.Body, 0600)
 }
 
-func (p *Page) parseLinks() {
+func (p *page) parseLinks() {
 	titles := getPagesTitles()
 	for i := range titles {
 		p.Body = []byte(strings.Replace(string(p.Body), titles[i], "<a href=\"/view/"+titles[i]+"\">"+titles[i]+"</a>", -1))
@@ -55,16 +55,16 @@ func getPagesTitles() []string {
 	return files
 }
 
-func loadPage(title string) (*Page, error) {
+func loadPage(title string) (*page, error) {
 	filename := filepath.Join("data", title+".txt")
 	body, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
-	return &Page{Title: title, Body: body}, nil
+	return &page{Title: title, Body: body}, nil
 }
 
-func renderTemplate(w http.ResponseWriter, tmplt string, p *Page) {
+func renderTemplate(w http.ResponseWriter, tmplt string, p *page) {
 	err := templates.ExecuteTemplate(w, tmplt+".html", p)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -84,14 +84,14 @@ func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
 func editHandler(w http.ResponseWriter, _ *http.Request, title string) {
 	p, err := loadPage(title)
 	if err != nil {
-		p = &Page{Title: title}
+		p = &page{Title: title}
 	}
 	renderTemplate(w, "edit", p)
 }
 
 func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
 	body := r.FormValue("body")
-	p := &Page{Title: title, Body: []byte(body)}
+	p := &page{Title: title, Body: []byte(body)}
 	err := p.save()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
