@@ -50,3 +50,17 @@ func TestGetKey(t *testing.T) {
 		t.Errorf("Empty node's key should be equal to 0, got: %d", actual)
 	}
 }
+
+func TestAddNode(t *testing.T) {
+	n1 := MakeNode(1)
+	n1.left = n1
+	n1.right = n1
+	n2 := MakeNode(2)
+	n2.left = n2
+	n2.right = n2
+
+	addNode(n1, n2)
+	if n1.left != n2 || n2.right != n1 {
+		t.Error("AddNode should add second node on the left of the first one")
+	}
+}
