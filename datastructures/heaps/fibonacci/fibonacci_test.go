@@ -187,3 +187,47 @@ func TestMinimum(t *testing.T) {
 		t.Error("Minimum should return h.min from updated heap")
 	}
 }
+
+func TestUnion1(t *testing.T) {
+	h1 := MakeHeap()
+	n1 := MakeNode(4)
+	n2 := MakeNode(2)
+	h1.Insert(n1)
+	h1.Insert(n2)
+
+	h2 := MakeHeap()
+	n3 := MakeNode(5)
+	n4 := MakeNode(8)
+	h2.Insert(n3)
+	h2.Insert(n4)
+
+	h3 := h1.Union(h2)
+
+	if h3.n != h1.n+h2.n {
+		t.Errorf("Merged heap's number of nodes should be %d, got %d", h1.n+h2.n, h3.n)
+	}
+
+	if h3.min != n2 {
+		t.Error("Merged heap's min should be the minimum of two heaps")
+	}
+}
+
+func TestUnion2(t *testing.T) {
+	h1 := MakeHeap()
+	n1 := MakeNode(4)
+	n2 := MakeNode(2)
+	h1.Insert(n1)
+	h1.Insert(n2)
+
+	h2 := MakeHeap()
+	n3 := MakeNode(1)
+	n4 := MakeNode(8)
+	h2.Insert(n3)
+	h2.Insert(n4)
+
+	h3 := h1.Union(h2)
+
+	if h3.min != n3 {
+		t.Error("Merged heap's min should be the minimum of two heaps")
+	}
+}
