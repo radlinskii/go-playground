@@ -173,10 +173,16 @@ func link(y, x *Node) {
 	y.mark = false
 }
 
+type errInvalidArgument int
+
+func (e errInvalidArgument) Error() string {
+	return fmt.Sprintf("Cannot decrese key to a bigger value:, %d", int(e))
+}
+
 // DecreaseKey decreases the key of given node.
-func (fh *Heap) DecreaseKey(x *Node, k int) {
+func (fh *Heap) DecreaseKey(x *Node, k int) error {
 	if x.key < k {
-		panic("new key is greater than the previous one")
+		return errInvalidArgument(k)
 	}
 	x.key = k
 	y := x.parent
@@ -187,6 +193,7 @@ func (fh *Heap) DecreaseKey(x *Node, k int) {
 	if x.key < fh.min.key {
 		fh.min = x
 	}
+	return nil
 }
 
 func (fh *Heap) cut(x, y *Node) {
@@ -217,9 +224,13 @@ func (fh *Heap) cascadingCut(y *Node) {
 }
 
 // Delete deletes node x from heap fh.
-func (fh *Heap) Delete(x *Node) {
-	fh.DecreaseKey(x, int(-1<<63))
+func (fh *Heap) Delete(x *Node) error {
+	err := fh.DecreaseKey(x, int(-1<<63))
+	if err != nil {
+		return err
+	}
 	fh.ExtractMin()
+	return nil
 }
 
 // Vis visualizes the heap. All credits to "https://rosettacode.org/wiki/Fibonacci_heap"
