@@ -22,6 +22,11 @@ func (n *Node) getKey() int {
 	return n.key
 }
 
+// MakeNode creates a node with key equal to the given value.
+func MakeNode(k int) *Node {
+	return &Node{key: k}
+}
+
 // MakeHeap creates and returns a new, empty heap.
 func MakeHeap() *Heap {
 	return &Heap{}
