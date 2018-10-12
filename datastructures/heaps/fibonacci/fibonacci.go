@@ -176,7 +176,7 @@ func link(y, x *Node) {
 type errInvalidArgument int
 
 func (e errInvalidArgument) Error() string {
-	return fmt.Sprintf("Cannot decrese key to a bigger value:, %d", int(e))
+	return fmt.Sprintf("Cannot decrese key to a bigger value: %d", int(e))
 }
 
 // DecreaseKey decreases the key of given node.
