@@ -38,10 +38,7 @@ func (fh *Heap) addRoot(x *Node) {
 
 // MakeHeap creates and returns a new, empty heap.
 func MakeHeap() *Heap {
-	var fh Heap
-	fh.min = nil
-	fh.n = 0
-	return &fh
+	return &Heap{}
 }
 
 // Insert inserts a new node, with predeclared Key, to the heap.
