@@ -18,24 +18,6 @@ type Node struct {
 	degree                     int
 }
 
-func (fh *Heap) addRoot(x *Node) {
-	if fh.min == nil {
-		// create fh's root list containing only x
-		x.left = x
-		x.right = x
-		fh.min = x
-	} else {
-		// insert x to fh's root list
-		fh.min.left.right = x
-		x.right = fh.min
-		x.left = fh.min.left
-		fh.min.left = x
-		if x.Key < fh.min.Key {
-			fh.min = x
-		}
-	}
-}
-
 // MakeHeap creates and returns a new, empty heap.
 func MakeHeap() *Heap {
 	return &Heap{}
@@ -51,6 +33,28 @@ func (fh *Heap) Insert(x *Node) *Node {
 	fh.addRoot(x)
 	fh.n++
 	return x
+}
+
+func (fh *Heap) addRoot(x *Node) {
+	if fh.min == nil {
+		// create fh's root list containing only x
+		x.left = x
+		x.right = x
+		fh.min = x
+	} else {
+		// insert x to fh's root list
+		addNode(fh.min, x)
+		if x.Key < fh.min.Key {
+			fh.min = x
+		}
+	}
+}
+
+func addNode(n1, n2 *Node) {
+	n1.left.right = n2
+	n2.right = n1
+	n2.left = n1.left
+	n1.left = n2
 }
 
 // Minimum returns pointer to the heap's node holding the minimum Key.
@@ -90,10 +94,7 @@ func (fh *Heap) ExtractMin() *Node {
 				} else {
 					z.child = nil
 				}
-				x.left = z.left
-				x.right = z
-				z.left.right = x
-				z.left = x
+				addNode(z, x)
 			} else {
 				break
 			}
@@ -157,10 +158,7 @@ func (fh *Heap) link(y, x *Node) {
 		y.left = y
 		y.right = y
 	} else {
-		y.left = x.child.left
-		y.right = x.child
-		x.child.left.right = y
-		x.child.left = y
+		addNode(x.child, y)
 	}
 
 	y.mark = false
@@ -193,10 +191,7 @@ func (fh *Heap) cut(x, y *Node) {
 	}
 	y.degree--
 	// add x to fh's root list
-	x.left = fh.min.left
-	x.right = fh.min
-	fh.min.left.right = x
-	fh.min.left = x
+	addNode(fh.min, x)
 
 	x.parent = nil
 	x.mark = false
