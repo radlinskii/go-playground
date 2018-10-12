@@ -165,3 +165,25 @@ func TestInsert(t *testing.T) {
 		}
 	})
 }
+
+func TestMinimum(t *testing.T) {
+	h := MakeHeap()
+	n1 := MakeNode(4)
+	n2 := MakeNode(2)
+
+	if h.Minimum() != nil {
+		t.Error("Minimum on empty heap should return nil")
+	}
+
+	h.Insert(n1)
+
+	if h.Minimum() != n1 {
+		t.Error("Minimum should return h.min from heap with single element")
+	}
+
+	h.Insert(n2)
+
+	if h.Minimum() != n2 {
+		t.Error("Minimum should return h.min from updated heap")
+	}
+}
