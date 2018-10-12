@@ -265,5 +265,26 @@ func TestLink(t *testing.T) {
 			t.Error("link should add node on the left side of parent's child")
 		}
 	})
+}
+
+func TestConsolidate(t *testing.T) {
+	h := MakeHeap()
+	n1 := MakeNode(1)
+	n1.left = n1
+	n1.right = n1
+	h.Insert(n1)
+	n2 := MakeNode(2)
+	n2.left = n2
+	n2.right = n2
+	h.Insert(n2)
+
+	h.consolidate()
+	if h.Minimum() != n1 {
+		t.Error("consolidate should update heaps mininum element")
+	}
+
+	if h.min.child != n2 {
+		t.Error("consolidate should make heap's root list contain only single root with given degree")
+	}
 
 }
