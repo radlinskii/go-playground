@@ -34,3 +34,19 @@ func TestMakeNode(t *testing.T) {
 		t.Errorf("New Node degree should be 0, got: %d", n.degree)
 	}
 }
+
+func TestGetKey(t *testing.T) {
+	expected := 4
+	n := MakeNode(expected)
+	actual := n.GetKey()
+
+	if actual != expected {
+		t.Errorf("Expected: %d, got: %d", expected, actual)
+	}
+
+	n = &Node{}
+	actual = n.GetKey()
+	if actual != 0 {
+		t.Errorf("Empty node's key should be equal to 0, got: %d", actual)
+	}
+}
