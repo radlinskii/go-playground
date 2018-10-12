@@ -231,3 +231,39 @@ func TestUnion2(t *testing.T) {
 		t.Error("Merged heap's min should be the minimum of two heaps")
 	}
 }
+
+func TestLink(t *testing.T) {
+	n1 := MakeNode(1)
+	n1.left = n1
+	n1.right = n1
+	n2 := MakeNode(3)
+	n2.left = n2
+	n2.right = n2
+
+	n3 := MakeNode(5)
+	n3.left = n3
+	n3.right = n3
+
+	t.Run("link to node without child", func(t *testing.T) {
+		link(n1, n2)
+		if n1.parent != n2 {
+			t.Error("link should assign node's parent")
+		}
+
+		if n1.mark != false {
+			t.Error("link should unmark the node")
+		}
+
+		if n1.left != n1 || n1.right != n1 {
+			t.Error("link should create list with single element")
+		}
+	})
+	t.Run("link to node with a child", func(t *testing.T) {
+		link(n3, n2)
+
+		if n2.child.left != n3 {
+			t.Error("link should add node on the left side of parent's child")
+		}
+	})
+
+}
