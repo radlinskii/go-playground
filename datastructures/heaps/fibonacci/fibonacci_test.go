@@ -64,3 +64,41 @@ func TestAddNode(t *testing.T) {
 		t.Error("AddNode should add second node on the left of the first one")
 	}
 }
+
+func TestAddRoot(t *testing.T) {
+	h := MakeHeap()
+	n1 := MakeNode(2)
+	n2 := MakeNode(4)
+	n3 := MakeNode(1)
+
+	t.Run("addRoot on empty Fibonacci Heap", func(t *testing.T) {
+		h.addRoot(n1)
+		if h.min != n1 {
+			t.Error("addRoot should make new node assigned to h.min")
+		}
+	})
+
+	t.Run("addRoot with node's value bigger than h.min's key", func(t *testing.T) {
+		h.addRoot(n2)
+		if h.min == n2 {
+			t.Error("addRoot should leave the old h.min")
+		}
+
+		if h.min.left != n2 {
+			t.Error("addRoot should add the root on the left h.min")
+		}
+	})
+
+	t.Run("addRoot with node's value lesser than the h.min's key", func(t *testing.T) {
+		old := h.min
+		h.addRoot(n3)
+
+		if old.left != n3 {
+			t.Error("addRoot should add the root on the left of previous h.min")
+		}
+
+		if h.min != n3 {
+			t.Error("addRoot should make new node's assigned to h.min")
+		}
+	})
+}
