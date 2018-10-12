@@ -127,3 +127,41 @@ func TestRemoveNodeFromList(t *testing.T) {
 		t.Error("removeNodeFromList should't be able to remove node from list if it's the only element in the list")
 	}
 }
+
+func TestInsert(t *testing.T) {
+	h := MakeHeap()
+	n := MakeNode(3)
+
+	t.Run("Insert on empty Heap", func(t *testing.T) {
+		n.degree = 2
+		n.mark = true
+		n.parent = n
+		n.child = n
+
+		h.Insert(n)
+
+		if n.degree != 0 {
+			t.Errorf("Node's degree should equal to 0, got %d", n.degree)
+		}
+
+		if n.mark != false {
+			t.Error("Node should be unmarked")
+		}
+
+		if n.parent != nil {
+			t.Error("Node's parent should be nil")
+		}
+
+		if n.child != nil {
+			t.Error("Node's child should be nil")
+		}
+
+		if h.min != n {
+			t.Error("Insert should make node assigned to h.min")
+		}
+
+		if h.n != 1 {
+			t.Errorf("Heaps number of nodes should increment to 1, got %d", h.n)
+		}
+	})
+}
