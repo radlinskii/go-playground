@@ -288,3 +288,40 @@ func TestConsolidate(t *testing.T) {
 		t.Error("consolidate should make heap's root list contain only single root with given degree")
 	}
 }
+
+func TestExtractMin(t *testing.T) {
+	h := MakeHeap()
+	n1 := MakeNode(1)
+	n1.left = n1
+	n1.right = n1
+	h.Insert(n1)
+	n2 := MakeNode(2)
+	n2.left = n2
+	n2.right = n2
+	h.Insert(n2)
+	n3 := MakeNode(3)
+	n3.left = n3
+	n3.right = n3
+	h.Insert(n3)
+
+	n4 := h.ExtractMin()
+
+	if n4 != n1 {
+		t.Error("ExtractMin should extract minimum from the heap")
+	}
+
+	if h.Minimum() != n2 {
+		t.Error("ExtractMin should update minimum of the heap")
+	}
+
+	if h.n != 2 {
+		t.Errorf("number of nodes in the heap should be equal to 2, got %d", h.n)
+	}
+
+	h.ExtractMin()
+	h.ExtractMin()
+
+	if h.min != nil {
+		t.Error("ExtractMin should leave nil as h.min if there was only one element in the root list")
+	}
+}
