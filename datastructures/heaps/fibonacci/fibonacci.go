@@ -141,7 +141,7 @@ func (fh *Heap) consolidate() {
 				if y.key < x.key {
 					y, x = x, y
 				}
-				fh.link(y, x)
+				link(y, x)
 				delete(degreeToRoot, d)
 				d++
 			}
@@ -159,7 +159,7 @@ func (fh *Heap) consolidate() {
 
 }
 
-func (fh *Heap) link(y, x *Node) {
+func link(y, x *Node) {
 	removeNodeFromList(y)
 	// make y a child of x and increase degree of x
 	y.parent = x
