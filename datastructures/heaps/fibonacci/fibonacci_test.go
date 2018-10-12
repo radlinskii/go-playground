@@ -102,3 +102,28 @@ func TestAddRoot(t *testing.T) {
 		}
 	})
 }
+
+func TestRemoveNodeFromList(t *testing.T) {
+	h := MakeHeap()
+	n1 := MakeNode(2)
+	n2 := MakeNode(4)
+
+	h.addRoot(n1)
+	h.addRoot(n2)
+
+	removeNodeFromList(n1)
+
+	if n2.left == n1 || n1.right == n1 {
+		t.Error("removeNodeFromList should remove connections to node from the list it was in")
+	}
+
+	if n1.left != n2 || n1.right != n2 {
+		t.Error("removeNodeFromList shouldn't modify node's pointers")
+	}
+
+	removeNodeFromList(n2)
+
+	if n2.left != n2 || n2.right != n2 {
+		t.Error("removeNodeFromList should't be able to remove node from list if it's the only element in the list")
+	}
+}
