@@ -334,3 +334,28 @@ func TestErrInvalidArgument(t *testing.T) {
 		t.Error("ErrInvalidArgument should rerturn proper message")
 	}
 }
+
+func TestCut(t *testing.T) {
+	h := MakeHeap()
+	n1 := MakeNode(2)
+	n1.left = n1
+	n1.right = n1
+	h.Insert(n1)
+	n2 := MakeNode(4)
+	addNode(n1, n2)
+	n1.degree = 1
+
+	h.cut(n2, n1)
+
+	if n1.degree != 0 {
+		t.Errorf("Roots degree should be equal to 0, got: %d", n1.degree)
+	}
+
+	if n2.mark != false {
+		t.Error("cut should unmark the node")
+	}
+
+	if n2.parent != nil {
+		t.Error("cut should make node's parent equal to nil")
+	}
+}
