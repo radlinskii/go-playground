@@ -1,10 +1,6 @@
 package fibonacci
 
-import (
-	"fmt"
-
-	goheap "github.com/theodesp/go-heaps"
-)
+import "fmt"
 
 // Heap is a implementation of Fibonacci heap.
 // Implementation from Introduction to Algorithms by T. Cormen
@@ -16,7 +12,7 @@ type Heap struct {
 
 // Node holds structure of nodes inside Fibonacci heap.
 type Node struct {
-	Key                        goheap.Item
+	Key                        int
 	left, right, parent, child *Node
 	mark                       bool
 	degree                     int
@@ -34,7 +30,7 @@ func (fh *Heap) addRoot(x *Node) {
 		x.right = fh.min
 		x.left = fh.min.left
 		fh.min.left = x
-		if x.Key.Compare(fh.min.Key) < 0 {
+		if x.Key < fh.min.Key {
 			fh.min = x
 		}
 	}
@@ -74,7 +70,7 @@ func (fh *Heap) Union(fh2 *Heap) *Heap {
 	fh2.min.left.right = newFH.min
 	fh2.min.left, newFH.min.left = newFH.min.left, fh2.min.left
 
-	if fh.min == nil || (fh2.min != nil && fh.min.Key.Compare(fh2.min.Key) > 0) {
+	if fh.min == nil || (fh2.min != nil && fh.min.Key > fh2.min.Key) {
 		newFH.min = fh2.min
 	}
 	newFH.n = fh.n + fh2.n
@@ -132,7 +128,7 @@ func (fh *Heap) consolidate() {
 			if y, ok := degreeToRoot[d]; !ok {
 				break
 			} else {
-				if y.Key.Compare(x.Key) < 0 {
+				if y.Key < x.Key {
 					y, x = x, y
 				}
 				fh.link(y, x)
@@ -174,17 +170,17 @@ func (fh *Heap) link(y, x *Node) {
 }
 
 // DecreaseKey decreases the key of given node.
-func (fh *Heap) DecreaseKey(x *Node, k goheap.Item) {
-	if x.Key.Compare(k) < 0 {
+func (fh *Heap) DecreaseKey(x *Node, k int) {
+	if x.Key < k {
 		panic("new Key is greater than the previous one")
 	}
 	x.Key = k
 	y := x.parent
-	if y != nil && x.Key.Compare(y.Key) < 0 {
+	if y != nil && x.Key < y.Key {
 		fh.cut(x, y)
 		fh.cascadingCut(y)
 	}
-	if x.Key.Compare(fh.min.Key) < 0 {
+	if x.Key < fh.min.Key {
 		fh.min = x
 	}
 }
@@ -223,12 +219,7 @@ func (fh *Heap) cascadingCut(y *Node) {
 
 // Delete deletes node x from heap fh.
 func (fh *Heap) Delete(x *Node) {
-	switch x.Key.(type) {
-	case goheap.Integer:
-		fh.DecreaseKey(x, goheap.Item(goheap.Integer(-1<<63)))
-	case goheap.String:
-		fh.DecreaseKey(x, goheap.Item(goheap.String("")))
-	}
+	fh.DecreaseKey(x, int(-1<<63))
 	fh.ExtractMin()
 }
 
