@@ -258,6 +258,7 @@ func TestLink(t *testing.T) {
 			t.Error("link should create list with single element")
 		}
 	})
+
 	t.Run("link to node with a child", func(t *testing.T) {
 		link(n3, n2)
 
@@ -286,5 +287,4 @@ func TestConsolidate(t *testing.T) {
 	if h.min.child != n2 {
 		t.Error("consolidate should make heap's root list contain only single root with given degree")
 	}
-
 }

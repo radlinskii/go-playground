@@ -156,7 +156,6 @@ func (fh *Heap) consolidate() {
 	for _, v := range degreeToRoot {
 		fh.addRoot(v)
 	}
-
 }
 
 func link(y, x *Node) {
