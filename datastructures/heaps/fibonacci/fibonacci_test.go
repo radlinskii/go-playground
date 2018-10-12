@@ -325,3 +325,12 @@ func TestExtractMin(t *testing.T) {
 		t.Error("ExtractMin should leave nil as h.min if there was only one element in the root list")
 	}
 }
+
+func TestErrInvalidArgument(t *testing.T) {
+	expected := "Cannot decrese key to a bigger value: 4"
+	actual := errInvalidArgument(4).Error()
+
+	if expected != actual {
+		t.Error("ErrInvalidArgument should rerturn proper message")
+	}
+}
