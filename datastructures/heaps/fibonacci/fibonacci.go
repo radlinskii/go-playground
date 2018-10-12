@@ -18,7 +18,8 @@ type Node struct {
 	degree                     int
 }
 
-func (n *Node) getKey() int {
+// GetKey gets a value of node's key.
+func (n *Node) GetKey() int {
 	return n.key
 }
 
