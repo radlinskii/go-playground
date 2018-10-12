@@ -12,10 +12,14 @@ type Heap struct {
 
 // Node holds structure of nodes inside Fibonacci heap.
 type Node struct {
-	Key                        int
+	key                        int
 	left, right, parent, child *Node
 	mark                       bool
 	degree                     int
+}
+
+func (n *Node) getKey() int {
+	return n.key
 }
 
 // MakeHeap creates and returns a new, empty heap.
@@ -23,7 +27,7 @@ func MakeHeap() *Heap {
 	return &Heap{}
 }
 
-// Insert inserts a new node, with predeclared Key, to the heap.
+// Insert inserts a new node, with predeclared key, to the heap.
 func (fh *Heap) Insert(x *Node) *Node {
 	x.degree = 0
 	x.mark = false
@@ -44,7 +48,7 @@ func (fh *Heap) addRoot(x *Node) {
 	} else {
 		// insert x to fh's root list
 		addNode(fh.min, x)
-		if x.Key < fh.min.Key {
+		if x.key < fh.min.key {
 			fh.min = x
 		}
 	}
@@ -62,7 +66,7 @@ func removeNodeFromList(n *Node) {
 	n.right.left = n.left
 }
 
-// Minimum returns pointer to the heap's node holding the minimum Key.
+// Minimum returns pointer to the heap's node holding the minimum key.
 func (fh *Heap) Minimum() *Node {
 	return fh.min
 }
@@ -76,14 +80,14 @@ func (fh *Heap) Union(fh2 *Heap) *Heap {
 	fh2.min.left.right = newFH.min
 	fh2.min.left, newFH.min.left = newFH.min.left, fh2.min.left
 
-	if fh.min == nil || (fh2.min != nil && fh.min.Key > fh2.min.Key) {
+	if fh.min == nil || (fh2.min != nil && fh.min.key > fh2.min.key) {
 		newFH.min = fh2.min
 	}
 	newFH.n = fh.n + fh2.n
 	return newFH
 }
 
-// ExtractMin extracts the node with minimum Key from a heap
+// ExtractMin extracts the node with minimum key from a heap
 // and returns pointer to this node.
 func (fh *Heap) ExtractMin() *Node {
 	z := fh.min
@@ -128,7 +132,7 @@ func (fh *Heap) consolidate() {
 			if y, ok := degreeToRoot[d]; !ok {
 				break
 			} else {
-				if y.Key < x.Key {
+				if y.key < x.key {
 					y, x = x, y
 				}
 				fh.link(y, x)
@@ -166,16 +170,16 @@ func (fh *Heap) link(y, x *Node) {
 
 // DecreaseKey decreases the key of given node.
 func (fh *Heap) DecreaseKey(x *Node, k int) {
-	if x.Key < k {
-		panic("new Key is greater than the previous one")
+	if x.key < k {
+		panic("new key is greater than the previous one")
 	}
-	x.Key = k
+	x.key = k
 	y := x.parent
-	if y != nil && x.Key < y.Key {
+	if y != nil && x.key < y.key {
 		fh.cut(x, y)
 		fh.cascadingCut(y)
 	}
-	if x.Key < fh.min.Key {
+	if x.key < fh.min.key {
 		fh.min = x
 	}
 }
@@ -230,9 +234,9 @@ func (fh Heap) Vis() {
 				pc = "  "
 			}
 			if x.child == nil {
-				fmt.Println("╴", x.Key)
+				fmt.Println("╴", x.key)
 			} else {
-				fmt.Println("┐", x.Key)
+				fmt.Println("┐", x.key)
 				f(x.child, pre+pc)
 			}
 			if x.right == n {
