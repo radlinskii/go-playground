@@ -57,6 +57,11 @@ func addNode(n1, n2 *Node) {
 	n1.left = n2
 }
 
+func removeNodeFromList(n *Node) {
+	n.left.right = n.right
+	n.right.left = n.left
+}
+
 // Minimum returns pointer to the heap's node holding the minimum Key.
 func (fh *Heap) Minimum() *Node {
 	return fh.min
@@ -89,8 +94,7 @@ func (fh *Heap) ExtractMin() *Node {
 				x.parent = nil
 				if x.right != x {
 					z.child = x.right
-					x.right.left = x.left
-					x.left.right = x.right
+					removeNodeFromList(x)
 				} else {
 					z.child = nil
 				}
@@ -99,9 +103,7 @@ func (fh *Heap) ExtractMin() *Node {
 				break
 			}
 		}
-		// remove z from fh's root list
-		z.left.right = z.right
-		z.right.left = z.left
+		removeNodeFromList(z)
 
 		if z == z.right {
 			fh.min = nil
@@ -148,9 +150,7 @@ func (fh *Heap) consolidate() {
 }
 
 func (fh *Heap) link(y, x *Node) {
-	// remove y from fh's root list
-	y.right.left = y.left
-	y.left.right = y.right
+	removeNodeFromList(y)
 	// make y a child of x and increase degree of x
 	y.parent = x
 	if x.child == nil {
@@ -184,13 +184,11 @@ func (fh *Heap) cut(x, y *Node) {
 	// remove x from y's children list and decrement y's degree
 	if x.right != x {
 		y.child = x.right
-		x.right.left = x.left
-		x.left.right = x.right
+		removeNodeFromList(x)
 	} else {
 		y.child = nil
 	}
 	y.degree--
-	// add x to fh's root list
 	addNode(fh.min, x)
 
 	x.parent = nil
