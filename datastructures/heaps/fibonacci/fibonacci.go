@@ -28,21 +28,11 @@ func MakeNode(k int) *Node {
 	return &Node{key: k}
 }
 
-// MakeHeap creates and returns a new, empty heap.
-func MakeHeap() *Heap {
-	return &Heap{}
-}
-
-// Insert inserts a new node, with predeclared key, to the heap.
-func (fh *Heap) Insert(x *Node) *Node {
-	x.degree = 0
-	x.mark = false
-	x.parent = nil
-	x.child = nil
-
-	fh.addRoot(x)
-	fh.n++
-	return x
+func addNode(n1, n2 *Node) {
+	n1.left.right = n2
+	n2.right = n1
+	n2.left = n1.left
+	n1.left = n2
 }
 
 func (fh *Heap) addRoot(x *Node) {
@@ -60,16 +50,26 @@ func (fh *Heap) addRoot(x *Node) {
 	}
 }
 
-func addNode(n1, n2 *Node) {
-	n1.left.right = n2
-	n2.right = n1
-	n2.left = n1.left
-	n1.left = n2
-}
-
 func removeNodeFromList(n *Node) {
 	n.left.right = n.right
 	n.right.left = n.left
+}
+
+// MakeHeap creates and returns a new, empty heap.
+func MakeHeap() *Heap {
+	return &Heap{}
+}
+
+// Insert inserts a new node, with predeclared key, to the heap.
+func (fh *Heap) Insert(x *Node) *Node {
+	x.degree = 0
+	x.mark = false
+	x.parent = nil
+	x.child = nil
+
+	fh.addRoot(x)
+	fh.n++
+	return x
 }
 
 // Minimum returns pointer to the heap's node holding the minimum key.
