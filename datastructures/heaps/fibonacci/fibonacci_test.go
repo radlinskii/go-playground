@@ -318,6 +318,12 @@ func TestExtractMin(t *testing.T) {
 		t.Errorf("number of nodes in the heap should be equal to 2, got %d", h.n)
 	}
 
+	n5 := MakeNode(5)
+	n5.right = n5
+	n5.left = n5
+	addNode(n3, n5)
+
+	h.ExtractMin()
 	h.ExtractMin()
 	h.ExtractMin()
 
