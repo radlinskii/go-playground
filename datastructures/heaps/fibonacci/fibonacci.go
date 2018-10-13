@@ -35,17 +35,17 @@ func addNode(n1, n2 *Node) {
 	n1.left = n2
 }
 
-func (fh *Heap) addRoot(x *Node) {
-	if fh.min == nil {
-		// create fh's root list containing only x
+func (h *Heap) addRoot(x *Node) {
+	if h.min == nil {
+		// create h's root list containing only x
 		x.left = x
 		x.right = x
-		fh.min = x
+		h.min = x
 	} else {
-		// insert x to fh's root list
-		addNode(fh.min, x)
-		if x.key < fh.min.key {
-			fh.min = x
+		// insert x to h's root list
+		addNode(h.min, x)
+		if x.key < h.min.key {
+			h.min = x
 		}
 	}
 }
@@ -61,45 +61,45 @@ func MakeHeap() *Heap {
 }
 
 // Insert inserts a new node, with predeclared key, to the heap.
-func (fh *Heap) Insert(x *Node) *Node {
+func (h *Heap) Insert(x *Node) *Node {
 	x.degree = 0
 	x.mark = false
 	x.parent = nil
 	x.child = nil
 
-	fh.addRoot(x)
-	fh.n++
+	h.addRoot(x)
+	h.n++
 	return x
 }
 
 // Minimum returns pointer to the heap's node holding the minimum key.
-func (fh *Heap) Minimum() *Node {
-	return fh.min
+func (h *Heap) Minimum() *Node {
+	return h.min
 }
 
 // Union creates and returns the merge of two mergeable heaps.
-func (fh *Heap) Union(fh2 *Heap) *Heap {
+func (h *Heap) Union(fh2 *Heap) *Heap {
 	newFH := MakeHeap()
-	newFH.min = fh.min
+	newFH.min = h.min
 
 	newFH.min.left.right = fh2.min
 	fh2.min.left.right = newFH.min
 	fh2.min.left, newFH.min.left = newFH.min.left, fh2.min.left
 
-	if fh.min == nil || (fh2.min != nil && fh.min.key > fh2.min.key) {
+	if h.min == nil || (fh2.min != nil && h.min.key > fh2.min.key) {
 		newFH.min = fh2.min
 	}
-	newFH.n = fh.n + fh2.n
+	newFH.n = h.n + fh2.n
 	return newFH
 }
 
 // ExtractMin extracts the node with minimum key from a heap
 // and returns pointer to this node.
-func (fh *Heap) ExtractMin() *Node {
-	z := fh.min
+func (h *Heap) ExtractMin() *Node {
+	z := h.min
 	if z != nil {
 		for {
-			// add z children to fh's root list
+			// add z children to h's root list
 			if x := z.child; x != nil {
 				x.parent = nil
 				if x.right != x {
@@ -116,19 +116,19 @@ func (fh *Heap) ExtractMin() *Node {
 		removeNodeFromList(z)
 
 		if z == z.right {
-			fh.min = nil
+			h.min = nil
 		} else {
-			fh.min = z.right
-			fh.consolidate()
+			h.min = z.right
+			h.consolidate()
 		}
-		fh.n--
+		h.n--
 	}
 	return z
 }
 
-func (fh *Heap) consolidate() {
+func (h *Heap) consolidate() {
 	degreeToRoot := make(map[int]*Node)
-	w := fh.min
+	w := h.min
 	last := w.left
 	for {
 		r := w.right
@@ -152,9 +152,9 @@ func (fh *Heap) consolidate() {
 		}
 		w = r
 	}
-	fh.min = nil
+	h.min = nil
 	for _, v := range degreeToRoot {
-		fh.addRoot(v)
+		h.addRoot(v)
 	}
 }
 
@@ -180,23 +180,23 @@ func (e errInvalidArgument) Error() string {
 }
 
 // DecreaseKey decreases the key of given node.
-func (fh *Heap) DecreaseKey(x *Node, k int) error {
+func (h *Heap) DecreaseKey(x *Node, k int) error {
 	if x.key < k {
 		return errInvalidArgument(k)
 	}
 	x.key = k
 	y := x.parent
 	if y != nil && x.key < y.key {
-		fh.cut(x, y)
-		fh.cascadingCut(y)
+		h.cut(x, y)
+		h.cascadingCut(y)
 	}
-	if x.key < fh.min.key {
-		fh.min = x
+	if x.key < h.min.key {
+		h.min = x
 	}
 	return nil
 }
 
-func (fh *Heap) cut(x, y *Node) {
+func (h *Heap) cut(x, y *Node) {
 	// remove x from y's children list and decrement y's degree
 	if x.right != x {
 		y.child = x.right
@@ -205,30 +205,30 @@ func (fh *Heap) cut(x, y *Node) {
 		y.child = nil
 	}
 	y.degree--
-	addNode(fh.min, x)
+	addNode(h.min, x)
 
 	x.parent = nil
 	x.mark = false
 }
 
-func (fh *Heap) cascadingCut(y *Node) {
+func (h *Heap) cascadingCut(y *Node) {
 	z := y.parent
 	if z != nil {
 		if !y.mark {
 			y.mark = true
 		} else {
-			fh.cut(y, z)
-			fh.cascadingCut(z)
+			h.cut(y, z)
+			h.cascadingCut(z)
 		}
 	}
 }
 
-// Delete deletes node x from heap fh.
-func (fh *Heap) Delete(x *Node) error {
-	err := fh.DecreaseKey(x, int(-1<<63))
+// Delete deletes node x from heap h.
+func (h *Heap) Delete(x *Node) error {
+	err := h.DecreaseKey(x, int(-1<<63))
 	if err != nil {
 		return err
 	}
-	fh.ExtractMin()
+	h.ExtractMin()
 	return nil
 }
