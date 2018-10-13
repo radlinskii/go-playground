@@ -389,3 +389,37 @@ func TestCascadingCut(t *testing.T) {
 		t.Error("cascadingCut should remove parent if node was marked")
 	}
 }
+
+func TestDecreaseKey(t *testing.T) {
+	h := MakeHeap()
+	n1 := MakeNode(2)
+	n1.left = n1
+	n1.right = n1
+	h.Insert(n1)
+	t.Run("with argument greater than the previous key", func(t *testing.T) {
+		err := h.DecreaseKey(n1, 5)
+		if _, ok := err.(errInvalidArgument); !ok {
+			t.Error("should return errInvalidArgument error")
+		}
+	})
+
+	n2 := MakeNode(4)
+	n2.left = n2
+	n2.right = n2
+	link(n2, n1)
+	t.Run("with valid argument", func(t *testing.T) {
+		expectedKey := 1
+		err := h.DecreaseKey(n2, expectedKey)
+		if err != nil {
+			t.Error("shouldn't return an error")
+		}
+
+		if n2.key != expectedKey {
+			t.Errorf("Expected updated node's key to equal %d, got %d", expectedKey, n2.key)
+		}
+
+		if h.min != n2 {
+			t.Error("should update heap's mean")
+		}
+	})
+}
