@@ -1,10 +1,10 @@
+// Package fibonacci is an implementation from Introduction to Algorithms by T. Cormen
+// Reference: https://en.wikipedia.org/wiki/Fibonacci_heap
 package fibonacci
 
 import "fmt"
 
 // Heap is a implementation of Fibonacci heap.
-// Implementation from Introduction to Algorithms by T. Cormen
-// Reference: https://en.wikipedia.org/wiki/Fibonacci_heap
 type Heap struct {
 	min *Node
 	n   int
