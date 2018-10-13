@@ -22,7 +22,7 @@ func TestBubble(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			got := Bubble(test.slice)
 			if !reflect.DeepEqual(got, test.expected) {
-				t.Errorf("\nIsOdd(%v) \nexpected: %v \ngot: %v", test.slice, test.expected, got)
+				t.Errorf("\nBubble(%v) \nexpected: %v \ngot: %v", test.slice, test.expected, got)
 			}
 		})
 	}
