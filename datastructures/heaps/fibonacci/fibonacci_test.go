@@ -423,3 +423,20 @@ func TestDecreaseKey(t *testing.T) {
 		}
 	})
 }
+
+func TestDelete(t *testing.T) {
+	h := MakeHeap()
+	n1 := MakeNode(2)
+	n1.left = n1
+	n1.right = n1
+	h.Insert(n1)
+
+	err := h.Delete(n1)
+	if err != nil {
+		t.Error("shouldn't return an error")
+	}
+
+	if h.Minimum() != nil {
+		t.Error("should remove node from the heap")
+	}
+}
