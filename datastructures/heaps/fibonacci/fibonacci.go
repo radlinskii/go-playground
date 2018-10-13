@@ -232,33 +232,3 @@ func (fh *Heap) Delete(x *Node) error {
 	fh.ExtractMin()
 	return nil
 }
-
-// Vis visualizes the heap. All credits to "https://rosettacode.org/wiki/Fibonacci_heap"
-func (fh Heap) Vis() {
-	if fh.min == nil {
-		fmt.Println("<empty>")
-		return
-	}
-	var f func(*Node, string)
-	f = func(n *Node, pre string) {
-		pc := "│ "
-		for x := n; ; x = x.right {
-			if x.right != n {
-				fmt.Print(pre, "├─")
-			} else {
-				fmt.Print(pre, "└─")
-				pc = "  "
-			}
-			if x.child == nil {
-				fmt.Println("╴", x.key)
-			} else {
-				fmt.Println("┐", x.key)
-				f(x.child, pre+pc)
-			}
-			if x.right == n {
-				break
-			}
-		}
-	}
-	f(fh.min, "")
-}
