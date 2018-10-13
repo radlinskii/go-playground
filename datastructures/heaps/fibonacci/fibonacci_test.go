@@ -359,3 +359,27 @@ func TestCut(t *testing.T) {
 		t.Error("cut should make node's parent equal to nil")
 	}
 }
+
+func TestCascadingCut(t *testing.T) {
+	h := MakeHeap()
+	n1 := MakeNode(2)
+	n1.left = n1
+	n1.right = n1
+	h.Insert(n1)
+	n2 := MakeNode(3)
+	n2.left = n2
+	n2.right = n2
+	link(n2, n1)
+
+	h.cascadingCut(n2)
+
+	if n2.mark != true {
+		t.Error("cascadingCut should mark unmarked node")
+	}
+
+	h.cascadingCut(n2)
+
+	if n2.parent != nil {
+		t.Error("cascadingCut should remove parent if node was marked")
+	}
+}
