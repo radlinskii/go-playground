@@ -1,4 +1,4 @@
-package strutils
+package str
 
 // ToUpperCase takes string and returns its copy transformed to contain only upper-letters.
 func ToUpperCase(s string) string {

@@ -1,4 +1,4 @@
-package strutils
+package str
 
 // Reverse takes a string and returns its reversed copy.
 func Reverse(s string) string {

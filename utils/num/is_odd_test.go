@@ -1,4 +1,4 @@
-package numutils
+package num
 
 import "testing"
 
