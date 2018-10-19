@@ -1,25 +1,35 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
 )
 
+// gopwd is an implementation of pwd(1) command.
 func main() {
-	args := os.Args
+	minusL := flag.Bool("L", false, "displays the current logical working directory")
+	minusP := flag.Bool("P", false, "displays the current physical working directory(all symbolic links resolved)")
+	flag.Parse()
+
+	if len(flag.Args()) != 0 {
+		fmt.Println("gopwd: too many arguments")
+		os.Exit(1)
+	}
+
 	pwd, err := os.Getwd()
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	if len(args) == 1 || (len(args) == 2 && args[1] == "-L") {
+	if *minusL || !*minusP {
 		fmt.Println(pwd)
 		os.Exit(0)
 	}
 
-	if len(args) == 2 && args[1] == "-P" {
+	if *minusP {
 		fi, err := os.Lstat(pwd)
 		if err != nil {
 			fmt.Println(err)
@@ -37,17 +47,9 @@ func main() {
 			os.Exit(0)
 		}
 
+		fmt.Println(pwd)
 		os.Exit(0)
 	}
 
-	os.Exit(-1)
+	os.Exit(1)
 }
-
-// -P, -PL, -LP pwd symlink
-// -L pwd
-// "" pwd
-// -L a - too many arguments
-// a -L - too many arguments
-// -La - bad option
-// -L -a - bad option
-// -a -L - bad option
