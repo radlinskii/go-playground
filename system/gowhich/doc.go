@@ -1,5 +1,5 @@
 /*
-Gowhich is an implementation of which(1) command in go.
+Gowhich locates a program file in the user's path.
 
 Usage:
 	gowhich [flags] path ...
@@ -9,5 +9,4 @@ The flags are:
 	-a: 	No output, just return 0 if all of the executables are found, or 1 if some were not found.
 
 */
-
 package main
