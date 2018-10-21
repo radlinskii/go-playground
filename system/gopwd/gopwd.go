@@ -7,10 +7,9 @@ import (
 	"path/filepath"
 )
 
-// gopwd is an implementation of pwd(1) command.
 func main() {
-	minusL := flag.Bool("L", false, "displays the current logical working directory")
-	minusP := flag.Bool("P", false, "displays the current physical working directory(all symbolic links resolved)")
+	minusL := flag.Bool("L", false, "Displays the current logical working directory.")
+	minusP := flag.Bool("P", false, "Displays the current physical working directory(all symbolic links resolved).")
 	flag.Parse()
 
 	if len(flag.Args()) != 0 {
