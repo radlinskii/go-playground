@@ -1,8 +1,8 @@
 package algo
 
-// Sieve is an implementation of Sieve of Eratosthenes.
-// Sieve returns slice of all primes numbers that are lower than given number.
-func Sieve(n int) []int {
+// EratosthenesSieve is an implementation of Sieve of Eratosthenes.
+// EratosthenesSieve returns slice of all primes numbers that are lower than given number.
+func EratosthenesSieve(n int) []int {
 	if n < 3 {
 		return []int{}
 	}

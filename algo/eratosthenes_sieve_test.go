@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestSieve(t *testing.T) {
+func TestEratosthenesSieve(t *testing.T) {
 	var testsTable = []struct {
 		name     string
 		n        int
@@ -27,9 +27,9 @@ func TestSieve(t *testing.T) {
 
 	for _, test := range testsTable {
 		t.Run(test.name, func(t *testing.T) {
-			got := Sieve(test.n)
+			got := EratosthenesSieve(test.n)
 			if !reflect.DeepEqual(got, test.expected) {
-				t.Errorf("\nSieve(%d) \nexpected: %v \ngot: %v", test.n, test.expected, got)
+				t.Errorf("\nEratosthenesSieve(%d) \nexpected: %v \ngot: %v", test.n, test.expected, got)
 			}
 		})
 	}
