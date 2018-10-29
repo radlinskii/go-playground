@@ -9,4 +9,4 @@ The flags are:
 	-P: 	Displays the current physical working directory(all symbolic links resolved).
 
 */
-package main // import "github.com/radlinskii/go-playground/system/gopwd"
+package main
