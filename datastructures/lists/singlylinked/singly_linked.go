@@ -140,3 +140,17 @@ func (l *List) HasCycle() bool {
 	}
 	return true
 }
+
+// Reverse reverses the order of the list.
+func (l *List) Reverse() {
+	var prev *Node
+	current := l.head
+	var next *Node
+	for current != nil {
+		next = current.next
+		current.next = prev
+		prev = current
+		current = next
+	}
+	l.head = prev
+}

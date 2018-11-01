@@ -190,7 +190,9 @@ func ExampleInsert() {
 
 func TestHasCycle1(t *testing.T) {
 	l := MakeList()
-
+	if l.HasCycle() {
+		t.Error("HasCycle shouldn't detect a cycle without a reason")
+	}
 	l.Prepend(2)
 	l.Prepend(3)
 	l.Prepend(4)
@@ -212,4 +214,19 @@ func TestHasCycle2(t *testing.T) {
 	if !l.HasCycle() {
 		t.Error("HasCycle should properly detect a cycle")
 	}
+}
+
+func ExampleReverse() {
+	l := MakeList()
+	l.Prepend(4)
+	l.Prepend(5)
+	l.Prepend(7)
+	l.Prepend(2)
+	l.Print()
+	l.Reverse()
+	l.Print()
+
+	// Output:
+	// ->2->7->5->4->
+	// ->4->5->7->2->
 }
