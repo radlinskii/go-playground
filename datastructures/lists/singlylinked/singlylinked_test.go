@@ -1,6 +1,9 @@
 package singlylinked
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestMakeNode(t *testing.T) {
 	var testsTable = []struct {
@@ -34,7 +37,7 @@ func TestMakeList(t *testing.T) {
 	}
 }
 
-func TestInsert(t *testing.T) {
+func TestPrepend(t *testing.T) {
 	l := MakeList()
 	l.Prepend(3)
 
@@ -125,7 +128,7 @@ func TestDelete(t *testing.T) {
 	}
 }
 
-func TestEnqueue(t *testing.T) {
+func TestAppend(t *testing.T) {
 	l := MakeList()
 	l.Append(4)
 
@@ -141,4 +144,46 @@ func TestEnqueue(t *testing.T) {
 	if l.head.key != 4 {
 		t.Error("Append should not update list head")
 	}
+}
+
+func ExamplePrint() {
+	l := MakeList()
+	l.Print()
+	l.Prepend(3)
+	l.Print()
+	l.Prepend(4)
+	l.Print()
+	l.Prepend(5)
+	l.Print()
+
+	// Output:
+	// Empty list!
+	// ->3->
+	// ->4->3->
+	// ->5->4->3->
+}
+
+func ExampleInsert() {
+	l := MakeList()
+	l.Insert(4, 0)
+	l.Print()
+	fmt.Println(l.Insert(4, 2))
+	l.Print()
+	l.Insert(5, 1)
+	l.Print()
+	l.Insert(6, 2)
+	l.Print()
+	l.Insert(3, 1)
+	l.Print()
+	l.Insert(8, 0)
+	l.Print()
+
+	// Output:
+	// ->4->
+	// false
+	// ->4->
+	// ->4->5->
+	// ->4->5->6->
+	// ->4->3->5->6->
+	// ->8->4->3->5->6->
 }

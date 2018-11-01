@@ -1,5 +1,7 @@
 package singlylinked
 
+import "fmt"
+
 // Node type is a node of singly linked list.
 type Node struct {
 	key  int
@@ -18,6 +20,21 @@ type List struct {
 // MakeList creates an empty list.
 func MakeList() *List {
 	return &List{}
+}
+
+// Print prints keys of elements of the list.
+func (l *List) Print() {
+	x := l.head
+	if x == nil {
+		fmt.Println("Empty list!")
+	} else {
+		fmt.Print("->")
+		for x != nil {
+			fmt.Printf("%d->", x.key)
+			x = x.next
+		}
+		fmt.Println()
+	}
 }
 
 // Prepend is adding node with a given value at the head of the list.
@@ -61,6 +78,7 @@ func (l *List) Search(v int) *Node {
 }
 
 // Delete removes from a list first node of a given value.
+// It returns true if node was deleted, false otherwise.
 func (l *List) Delete(v int) bool {
 	x := l.head
 	if x == nil {
@@ -78,4 +96,29 @@ func (l *List) Delete(v int) bool {
 		x = x.next
 	}
 	return false
+}
+
+// Insert inserts a node with given value at given position.
+// It returns true if node was inserted, false otherwise.
+func (l *List) Insert(v, pos int) bool {
+	if pos < 0 {
+		return false
+	}
+	if pos == 0 {
+		l.Prepend(v)
+		return true
+	}
+	i := 1
+	x := l.head
+	for x.next != nil && i != pos {
+		x = x.next
+		i++
+	}
+	if i != pos {
+		return false
+	}
+	n := &Node{key: v}
+	n.next = x.next
+	x.next = n
+	return true
 }
