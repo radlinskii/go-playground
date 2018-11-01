@@ -280,3 +280,33 @@ func ExampleInsertSort() {
 	// ->0->3->4->7->8->
 	// ->0->3->4->5->7->8->
 }
+
+func ExampleRemoveDuplicatesFromSortedList() {
+	l := MakeList()
+
+	l.RemoveDuplicatesFromSortedList()
+	l.Print()
+	l.InsertSort(3)
+	l.RemoveDuplicatesFromSortedList()
+	l.Print()
+	l.InsertSort(3)
+	l.Print()
+	l.RemoveDuplicatesFromSortedList()
+	l.Print()
+	l.InsertSort(7)
+	l.RemoveDuplicatesFromSortedList()
+	l.Print()
+	l.InsertSort(3)
+	l.Print()
+	l.RemoveDuplicatesFromSortedList()
+	l.Print()
+
+	// Output:
+	// Empty list!
+	// ->3->
+	// ->3->3->
+	// ->3->
+	// ->3->7->
+	// ->3->3->7->
+	// ->3->7->
+}

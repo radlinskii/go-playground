@@ -45,7 +45,7 @@ func (l *List) Prepend(v int) {
 	l.head = n
 }
 
-// Append should add an item at the end of the list
+// Append should add an item at the end of the list.
 func (l *List) Append(v int) {
 	x := l.head
 	if x == nil {
@@ -171,7 +171,7 @@ func (l *List) Reverse() {
 	l.head = prev
 }
 
-// Compare checks equality of two lists
+// Compare checks equality of two lists.
 func (l *List) Compare(l2 *List) bool {
 	if l.head == nil {
 		if l2.head == nil {
@@ -195,4 +195,20 @@ func (l *List) Compare(l2 *List) bool {
 		return false
 	}
 	return true
+}
+
+// RemoveDuplicatesFromSortedList removes nodes with duplicated values.
+func (l *List) RemoveDuplicatesFromSortedList() {
+	if l.head == nil || l.head.next == nil {
+		return
+	}
+	x := l.head
+	for x.next != nil {
+		if x.key == x.next.key {
+			x.next = x.next.next
+		}
+		if x.next != nil {
+			x = x.next
+		}
+	}
 }
