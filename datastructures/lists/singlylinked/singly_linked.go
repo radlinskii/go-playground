@@ -20,12 +20,35 @@ func MakeList() *List {
 	return &List{}
 }
 
-// Insert is adding node with a given value at the head of the list.
-func (l *List) Insert(v int) {
+// Prepend is adding node with a given value at the head of the list.
+func (l *List) Prepend(v int) {
 	n := &Node{key: v}
 
 	n.next = l.head
 	l.head = n
+}
+
+// Append should add an item at the end of the list
+func (l *List) Append(v int) {
+	x := l.head
+	if x == nil {
+		l.Prepend(v)
+	} else {
+		for x.next != nil {
+			x = x.next
+		}
+		n := makeNode(v)
+		x.next = n
+	}
+}
+
+// Pop is removing first element from the list and returns it.
+func (l *List) Pop() *Node {
+	x := l.head
+	if l.head != nil {
+		l.head = x.next
+	}
+	return x
 }
 
 // Search finds the first element with given value as its key.
@@ -35,4 +58,24 @@ func (l *List) Search(v int) *Node {
 		x = x.next
 	}
 	return x
+}
+
+// Delete removes from a list first node of a given value.
+func (l *List) Delete(v int) bool {
+	x := l.head
+	if x == nil {
+		return false
+	}
+	if x.key == v {
+		l.head = x.next
+		return true
+	}
+	for x.next != nil {
+		if x.next.key == v {
+			x.next = x.next.next
+			return true
+		}
+		x = x.next
+	}
+	return false
 }

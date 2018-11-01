@@ -36,19 +36,38 @@ func TestMakeList(t *testing.T) {
 
 func TestInsert(t *testing.T) {
 	l := MakeList()
-	l.Insert(3)
+	l.Prepend(3)
 
 	if l.head.key != 3 {
-		t.Error("Insert should insert 3 as key of list head")
+		t.Error("Prepend should insert 3 as key of list head")
 	}
 
-	l.Insert(5)
+	l.Prepend(5)
 	if l.head.key != 5 {
-		t.Error("Insert should insert 5 as key of list head")
+		t.Error("Prepend should insert 5 as key of list head")
 	}
 
 	if l.head.next.key != 3 {
-		t.Error("Insert add new node at the begging of the list")
+		t.Error("Prepend add new node at the begging of the list")
+	}
+}
+
+func TestPop(t *testing.T) {
+	l := MakeList()
+	n := l.Pop()
+	if n != nil {
+		t.Error("Pop should return nil when called on an empty list")
+	}
+
+	l.Prepend(4)
+
+	n = l.Pop()
+	if n.key != 4 {
+		t.Error("Pop should return first element from a list")
+	}
+
+	if l.head != nil {
+		t.Error("Pop should remove an element from a list")
 	}
 }
 
@@ -56,6 +75,70 @@ func TestSearch(t *testing.T) {
 	l := MakeList()
 
 	if l.Search(3) != nil {
-		t.Errorf("Search on empty list should definitely return nil")
+		t.Error("Search on empty list should definitely return nil")
+	}
+
+	l.Prepend(3)
+
+	if l.Search(3) != l.head {
+		t.Error("Search should find the right node in list with single element")
+	}
+
+	l.Prepend(4)
+	if l.Search(3) != l.head.next {
+		t.Error("Search should find nodes deep in the list")
+	}
+
+	if l.Search(5) != nil {
+		t.Error("Search should not find unexisting values")
+	}
+}
+
+func TestDelete(t *testing.T) {
+	l := MakeList()
+	if l.Delete(3) {
+		t.Error("Delete should return false when called on empty list")
+	}
+	l.Prepend(3)
+	l.Prepend(4)
+	l.Prepend(5)
+
+	if !l.Delete(3) {
+		t.Error("Delete should return true when removing an element")
+	}
+	if l.head.next.next != nil {
+		t.Error("Delete should remove node from a list")
+	}
+	if l.head.key != 5 {
+		t.Error("Delete should not change rest of the elements")
+	}
+
+	l.Delete(5)
+	if l.head.key != 4 {
+		t.Error("Delete should remove first element from the list")
+	}
+
+	l.Delete(4)
+
+	if l.head != nil {
+		t.Error("Delete should remove last element from the list")
+	}
+}
+
+func TestEnqueue(t *testing.T) {
+	l := MakeList()
+	l.Append(4)
+
+	if l.head.key != 4 {
+		t.Error("Append should at the first item to the list")
+	}
+
+	l.Append(5)
+	if l.head.next.key != 5 {
+		t.Error("Append should add a node at the end of the list")
+	}
+
+	if l.head.key != 4 {
+		t.Error("Append should not update list head")
 	}
 }
