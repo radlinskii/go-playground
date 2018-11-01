@@ -39,7 +39,7 @@ func (l *List) Print() {
 
 // Prepend is adding node with a given value at the head of the list.
 func (l *List) Prepend(v int) {
-	n := &Node{key: v}
+	n := makeNode(v)
 
 	n.next = l.head
 	l.head = n
@@ -117,10 +117,26 @@ func (l *List) Insert(v, pos int) bool {
 	if i != pos {
 		return false
 	}
-	n := &Node{key: v}
+	n := makeNode(v)
 	n.next = x.next
 	x.next = n
 	return true
+}
+
+// InsertSort inserts a node with given values inside the list
+// in such position that keeps list in ascending order.
+func (l *List) InsertSort(v int) {
+	if l.head == nil || l.head.key > v {
+		l.Prepend(v)
+		return
+	}
+	x := l.head
+	for x.next != nil && x.next.key < v {
+		x = x.next
+	}
+	n := makeNode(v)
+	n.next = x.next
+	x.next = n
 }
 
 // HasCycle checks if list contains a cycle.

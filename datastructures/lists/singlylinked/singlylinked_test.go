@@ -254,5 +254,29 @@ func ExampleCompare() {
 	// false
 	// true
 	// false
+}
 
+func ExampleInsertSort() {
+	l := MakeList()
+
+	l.InsertSort(4)
+	l.Print()
+	l.InsertSort(7)
+	l.Print()
+	l.InsertSort(3)
+	l.Print()
+	l.InsertSort(8)
+	l.Print()
+	l.InsertSort(0)
+	l.Print()
+	l.InsertSort(5)
+	l.Print()
+
+	// Output:
+	// ->4->
+	// ->4->7->
+	// ->3->4->7->
+	// ->3->4->7->8->
+	// ->0->3->4->7->8->
+	// ->0->3->4->5->7->8->
 }
