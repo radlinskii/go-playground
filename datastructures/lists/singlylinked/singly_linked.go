@@ -154,3 +154,29 @@ func (l *List) Reverse() {
 	}
 	l.head = prev
 }
+
+// Compare checks equality of two lists
+func (l *List) Compare(l2 *List) bool {
+	if l.head == nil {
+		if l2.head == nil {
+			return true
+		}
+		return false
+	}
+	if l2.head == nil {
+		return false
+	}
+	x1 := l.head
+	x2 := l2.head
+	for x1 != nil && x2 != nil {
+		if x1.key != x2.key {
+			return false
+		}
+		x1 = x1.next
+		x2 = x2.next
+	}
+	if (x1 == nil && x2 != nil) || (x1 != nil && x2 == nil) {
+		return false
+	}
+	return true
+}

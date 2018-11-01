@@ -230,3 +230,29 @@ func ExampleReverse() {
 	// ->2->7->5->4->
 	// ->4->5->7->2->
 }
+
+func ExampleCompare() {
+	l := MakeList()
+	l2 := MakeList()
+	fmt.Println(l.Compare(l2))
+	l.Append(4)
+	fmt.Println(l.Compare(l2))
+	l2.Append(4)
+	fmt.Println(l.Compare(l2))
+	l.Append(5)
+	fmt.Println(l.Compare(l2))
+	l2.Append(5)
+	fmt.Println(l.Compare(l2))
+	l2.Append(7)
+	l.Append(8)
+	fmt.Println(l.Compare(l2))
+
+	// Output:
+	// true
+	// false
+	// true
+	// false
+	// true
+	// false
+
+}
