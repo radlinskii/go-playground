@@ -187,3 +187,29 @@ func ExampleInsert() {
 	// ->4->3->5->6->
 	// ->8->4->3->5->6->
 }
+
+func TestHasCycle1(t *testing.T) {
+	l := MakeList()
+
+	l.Prepend(2)
+	l.Prepend(3)
+	l.Prepend(4)
+
+	if l.HasCycle() {
+		t.Error("HasCycle shouldn't detect a cycle without a reason")
+	}
+}
+
+func TestHasCycle2(t *testing.T) {
+	l := MakeList()
+
+	l.Prepend(3)
+	l.Prepend(4)
+	l.Prepend(5)
+	n := l.Search(3)
+	n.next = l.head
+
+	if !l.HasCycle() {
+		t.Error("HasCycle should properly detect a cycle")
+	}
+}

@@ -122,3 +122,21 @@ func (l *List) Insert(v, pos int) bool {
 	x.next = n
 	return true
 }
+
+// HasCycle checks if list contains a cycle.
+func (l *List) HasCycle() bool {
+	if l.head == nil {
+		return false
+	}
+
+	slow := l.head
+	fast := l.head.next
+	for slow != fast {
+		if fast == nil || fast.next == nil {
+			return false
+		}
+		slow = slow.next
+		fast = fast.next.next
+	}
+	return true
+}
