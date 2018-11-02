@@ -197,8 +197,23 @@ func (l *List) Compare(l2 *List) bool {
 	return true
 }
 
-// RemoveDuplicatesFromSortedList removes nodes with duplicated values.
-func (l *List) RemoveDuplicatesFromSortedList() {
+// IsAscending checks if list is sorted in ascending order.
+func (l *List) IsAscending() bool {
+	if l.head == nil || l.head.next == nil {
+		return true
+	}
+	x := l.head
+	for x.next != nil {
+		if x.next.key < x.key {
+			return false
+		}
+		x = x.next
+	}
+	return true
+}
+
+// RemoveDuplicatesFromAscendingList removes nodes with duplicated values.
+func (l *List) RemoveDuplicatesFromAscendingList() {
 	if l.head == nil || l.head.next == nil {
 		return
 	}
@@ -212,3 +227,7 @@ func (l *List) RemoveDuplicatesFromSortedList() {
 		}
 	}
 }
+
+// MergeAscendingLists
+
+// SortAscending

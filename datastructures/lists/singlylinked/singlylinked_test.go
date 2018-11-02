@@ -281,24 +281,24 @@ func ExampleInsertSort() {
 	// ->0->3->4->5->7->8->
 }
 
-func ExampleRemoveDuplicatesFromSortedList() {
+func ExampleRemoveDuplicatesFromAscendingList() {
 	l := MakeList()
 
-	l.RemoveDuplicatesFromSortedList()
+	l.RemoveDuplicatesFromAscendingList()
 	l.Print()
 	l.InsertSort(3)
-	l.RemoveDuplicatesFromSortedList()
+	l.RemoveDuplicatesFromAscendingList()
 	l.Print()
 	l.InsertSort(3)
 	l.Print()
-	l.RemoveDuplicatesFromSortedList()
+	l.RemoveDuplicatesFromAscendingList()
 	l.Print()
 	l.InsertSort(7)
-	l.RemoveDuplicatesFromSortedList()
+	l.RemoveDuplicatesFromAscendingList()
 	l.Print()
 	l.InsertSort(3)
 	l.Print()
-	l.RemoveDuplicatesFromSortedList()
+	l.RemoveDuplicatesFromAscendingList()
 	l.Print()
 
 	// Output:
@@ -309,4 +309,27 @@ func ExampleRemoveDuplicatesFromSortedList() {
 	// ->3->7->
 	// ->3->3->7->
 	// ->3->7->
+}
+
+func ExampleIsAscending() {
+	l := MakeList()
+	fmt.Println(l.IsAscending())
+	l.Prepend(2)
+	fmt.Println(l.IsAscending())
+	l.Prepend(4)
+	fmt.Println(l.IsAscending())
+	l.Prepend(1)
+	fmt.Println(l.IsAscending())
+	l.Delete(4)
+	fmt.Println(l.IsAscending())
+	l.Append(5)
+	fmt.Println(l.IsAscending())
+
+	// Output:
+	// true
+	// true
+	// false
+	// false
+	// true
+	// true
 }
