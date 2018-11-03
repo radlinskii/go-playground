@@ -138,9 +138,9 @@ func (l *List) Insert(v, pos int) bool {
 	return true
 }
 
-// InsertSort inserts a node with given values inside the list
+// InsertAscending inserts a node with given values inside the list
 // in such position that keeps list in ascending order.
-func (l *List) InsertSort(v int) {
+func (l *List) InsertAscending(v int) {
 	if l.head == nil || l.head.key > v {
 		l.Prepend(v)
 		return
@@ -317,7 +317,3 @@ func (headA *Node) MergeSortedLists(headB *Node) *Node {
 	}
 	return head
 }
-
-// MergeAscendingLists
-
-// SortAscending
