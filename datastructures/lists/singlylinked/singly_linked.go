@@ -40,7 +40,7 @@ func (l *List) GetHead() *Node {
 func (l *List) String() string {
 	x := l.head
 	if x == nil {
-		return "Empty list!\n"
+		return "Empty list!"
 	}
 	s := ""
 	s += "->"
@@ -48,7 +48,6 @@ func (l *List) String() string {
 		s += fmt.Sprintf("%d->", x.key)
 		x = x.next
 	}
-	s += "\n"
 	return s
 }
 
@@ -260,7 +259,7 @@ func (n *Node) sortAscending() *Node {
 	//List *left, *right, *head
 	left := n.sortAscending()
 	right := middleNext.sortAscending()
-	head := left.mergeSortedLists(right)
+	head := left.mergeAscendingLists(right)
 	return head
 }
 
@@ -284,7 +283,7 @@ func (n *Node) findMiddle() *Node {
 	return slow
 }
 
-func (n *Node) mergeSortedLists(headB *Node) *Node {
+func (n *Node) mergeAscendingLists(headB *Node) *Node {
 	if n == nil {
 		return headB
 	}

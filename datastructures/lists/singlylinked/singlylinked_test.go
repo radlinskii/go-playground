@@ -404,7 +404,7 @@ func TestGetHead(t *testing.T) {
 	}
 }
 
-func TestSort(t *testing.T) {
+func TestSortAscending(t *testing.T) {
 	l := MakeList()
 	l.Prepend(4)
 	l.Prepend(7)
@@ -430,7 +430,7 @@ func TestSort(t *testing.T) {
 
 func TestString(t *testing.T) {
 	l := MakeList()
-	if l.String() != "Empty list!\n" {
+	if l.String() != "Empty list!" {
 		t.Error("String on empty list failed")
 		t.Error(l)
 	}
@@ -440,7 +440,7 @@ func TestString(t *testing.T) {
 	l.InsertAscending(6)
 	l.Insert(4, 0)
 
-	if l.String() != "->4->5->6->7->\n" {
+	if l.String() != "->4->5->6->7->" {
 		t.Error("String failure")
 		t.Error(l)
 	}
@@ -475,5 +475,49 @@ func TestFindMiddle(t *testing.T) {
 	l.Append(65)
 	if l.head.findMiddle() != l.head.next.next {
 		t.Error("Find middle on list with five nodes should return the third one")
+	}
+}
+
+func TestMergeAscendingLists(t *testing.T) {
+	n := makeNode(1)
+	n2 := makeNode(2)
+	if n.mergeAscendingLists(nil) != n {
+		t.Error("merge list with nil failure")
+	}
+
+	n.next = makeNode(5)
+	n2.next = makeNode(6)
+
+	l := MakeList()
+	l.head = n.mergeAscendingLists(n2)
+
+	if l.String() != "->1->2->5->6->" {
+		t.Error("Merge lists failure")
+	}
+}
+
+func TestSortAscending2(t *testing.T) {
+	var n *Node
+	if n != n.sortAscending() {
+		t.Error("sortAscending should return nil on empty list")
+	}
+
+	n = makeNode(4)
+	if n != n.sortAscending() {
+		t.Error("sortAscending on list with one node should return the node")
+	}
+
+	n.next = makeNode(6)
+	n.next.next = makeNode(2)
+	n.next.next.next = makeNode(1)
+
+	n = n.sortAscending()
+
+	l := MakeList()
+	l.head = n
+
+	if l.String() != "->1->2->4->6->" {
+		t.Error("sortAscending should sort linked list in ascending order")
+		t.Log(l)
 	}
 }
