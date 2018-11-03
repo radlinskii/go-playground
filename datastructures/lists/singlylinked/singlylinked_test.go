@@ -334,6 +334,73 @@ func ExampleIsAscending() {
 	// true
 }
 
+func TestGetKey(t *testing.T) {
+	var testsTable = []struct {
+		name     string
+		node     Node
+		expected int
+	}{
+		{"positive number #1", Node{4, nil}, 4},
+		{"positive number #2", Node{32321, nil}, 32321},
+		{"negative number", Node{-21, nil}, -21},
+		{"empty node", Node{}, 0},
+	}
+
+	for _, test := range testsTable {
+		t.Run(test.name, func(t *testing.T) {
+			got := test.node.GetKey()
+			if got != test.expected {
+				t.Errorf("%v.GetKey(): expected: %d got: %d", test.node, got, test.expected)
+			}
+		})
+	}
+}
+
+func TestIsEmpty(t *testing.T) {
+	var testsTable = []struct {
+		name     string
+		node     *Node
+		expected bool
+	}{
+		{"empty list", nil, true},
+		{"valid node", &Node{32321, nil}, false},
+		{"empty node", &Node{}, false},
+	}
+
+	for _, test := range testsTable {
+		t.Run(test.name, func(t *testing.T) {
+			l := MakeList()
+			l.head = test.node
+			got := l.IsEmpty()
+			if got != test.expected {
+				t.Errorf("l.IsEmpty(): expected: %t got: %t", got, test.expected)
+			}
+		})
+	}
+}
+
+func TestGetHead(t *testing.T) {
+	var testsTable = []struct {
+		name string
+		node *Node
+	}{
+		{"empty list", nil},
+		{"valid node", &Node{32321, nil}},
+		{"empty node", &Node{}},
+	}
+
+	for _, test := range testsTable {
+		t.Run(test.name, func(t *testing.T) {
+			l := MakeList()
+			l.head = test.node
+			got := l.GetHead()
+			if got != test.node {
+				t.Errorf("l.GetHead(): expected: %v got: %v", test.node, got)
+			}
+		})
+	}
+}
+
 func TestSort(t *testing.T) {
 	l := MakeList()
 	l.Prepend(4)

@@ -12,6 +12,11 @@ func makeNode(v int) *Node {
 	return &Node{key: v, next: nil}
 }
 
+// GetKey is a getter for the key property of a node.
+func (n *Node) GetKey() int {
+	return n.key
+}
+
 // List is a structure holding singly linked list.
 type List struct {
 	head *Node
@@ -20,6 +25,16 @@ type List struct {
 // MakeList creates an empty list.
 func MakeList() *List {
 	return &List{}
+}
+
+// IsEmpty checks if list is empty.
+func (l *List) IsEmpty() bool {
+	return l.head == nil
+}
+
+// GetHead returns value of listt head.
+func (l *List) GetHead() *Node {
+	return l.head
 }
 
 // Print prints keys of elements of the list.
