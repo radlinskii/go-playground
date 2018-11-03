@@ -268,7 +268,7 @@ func (n *Node) findMiddle() *Node {
 	if n == nil {
 		return nil
 	}
-	//var slow, fast *List
+
 	slow := n
 	fast := n
 

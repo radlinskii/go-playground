@@ -445,3 +445,35 @@ func TestString(t *testing.T) {
 		t.Error(l)
 	}
 }
+
+func TestFindMiddle(t *testing.T) {
+	l := MakeList()
+	if l.head.findMiddle() != nil {
+		t.Error("Find middle failure on empty list")
+	}
+
+	l.Append(4)
+	if l.head.findMiddle() != l.head {
+		t.Error("Find middle on list with one node should return list's head")
+	}
+
+	l.Append(5)
+	if l.head.findMiddle() != l.head {
+		t.Error("Find middle on list with two nodes should return list's head")
+	}
+
+	l.Append(9)
+	if l.head.findMiddle() != l.head.next {
+		t.Error("Find middle on list with three nodes should return the second one")
+	}
+
+	l.Append(54)
+	if l.head.findMiddle() != l.head.next {
+		t.Error("Find middle on list with four nodes should return the second one")
+	}
+
+	l.Append(65)
+	if l.head.findMiddle() != l.head.next.next {
+		t.Error("Find middle on list with five nodes should return the third one")
+	}
+}
