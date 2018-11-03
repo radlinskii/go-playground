@@ -228,6 +228,77 @@ func (l *List) RemoveDuplicatesFromAscendingList() {
 	}
 }
 
+func (l *Node) SortAscending() *Node {
+	if l == nil || l.next == nil {
+		return l
+	}
+	//List *middle, *middleNext
+	middle := l.FindMiddle()
+	middleNext := middle.next
+	middle.next = nil
+
+	//List *left, *right, *head
+	left := l.SortAscending()
+	right := middleNext.SortAscending()
+	head := left.MergeSortedLists(right)
+	return head
+}
+func (l *Node) FindMiddle() *Node {
+	if l == nil {
+		return nil
+	}
+	//var slow, fast *List
+	slow := l
+	fast := l
+
+	for fast != nil {
+		fast = fast.next
+		if fast != nil {
+			fast = fast.next
+		}
+		if fast != nil {
+			slow = slow.next
+		}
+	}
+	return slow
+}
+func (headA *Node) MergeSortedLists(headB *Node) *Node {
+	if headA == nil {
+		return headB
+	}
+	if headB == nil {
+		return headA
+	}
+	var head, h *Node
+	for headA != nil && headB != nil {
+		if headA.key > headB.key {
+			if h == nil {
+				h = headB
+				head = headB
+			} else {
+				h.next = headB
+				h = h.next
+			}
+			headB = headB.next
+		} else {
+			if h == nil {
+				h = headA
+				head = headA
+			} else {
+				h.next = headA
+				h = h.next
+			}
+			headA = headA.next
+		}
+	}
+	if headA != nil {
+		h.next = headA
+	} else {
+		h.next = headB
+	}
+	return head
+}
+
 // MergeAscendingLists
 
 // SortAscending
