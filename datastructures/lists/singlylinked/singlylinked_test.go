@@ -400,3 +400,29 @@ func TestGetHead(t *testing.T) {
 		})
 	}
 }
+
+func TestSort(t *testing.T) {
+	l := MakeList()
+	l.Prepend(4)
+	l.Prepend(7)
+	l.Prepend(3)
+	l.Prepend(8)
+	l.Prepend(0)
+	l.Prepend(5)
+
+	l.SortSingleLinkedList()
+	l.Print()
+
+	l2 := MakeList()
+	l2.Prepend(0)
+	l2.Append(3)
+	l2.Append(4)
+	l2.Append(5)
+	l2.Append(7)
+	l2.Append(8)
+	l2.Print()
+
+	if !l.Compare(l2) {
+		t.Error("Sorting failed!")
+	}
+}
