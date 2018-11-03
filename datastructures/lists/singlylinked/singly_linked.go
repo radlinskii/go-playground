@@ -228,6 +228,10 @@ func (l *List) RemoveDuplicatesFromAscendingList() {
 	}
 }
 
+func (l *List) SortSingleLinkedList() {
+	l.head = l.head.SortAscending()
+}
+
 func (l *Node) SortAscending() *Node {
 	if l == nil || l.next == nil {
 		return l
