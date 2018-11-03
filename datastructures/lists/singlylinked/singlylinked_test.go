@@ -1,7 +1,6 @@
 package singlylinked
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -106,6 +105,10 @@ func TestDelete(t *testing.T) {
 	l.Prepend(4)
 	l.Prepend(5)
 
+	if l.Delete(6) {
+		t.Error("Delete should return false when given unexisting value")
+	}
+
 	if !l.Delete(3) {
 		t.Error("Delete should return true when removing an element")
 	}
@@ -146,46 +149,42 @@ func TestAppend(t *testing.T) {
 	}
 }
 
-func ExamplePrint() {
+func TestInsert(t *testing.T) {
 	l := MakeList()
-	l.Print()
-	l.Prepend(3)
-	l.Print()
-	l.Prepend(4)
-	l.Print()
-	l.Prepend(5)
-	l.Print()
+	if l.Insert(5, -2) {
+		t.Error("Insert should return false when given negative index")
+	}
 
-	// Output:
-	// Empty list!
-	// ->3->
-	// ->4->3->
-	// ->5->4->3->
-}
+	if l.GetHead() != nil {
+		t.Error("Insert on negative index should not add node to the list")
+	}
 
-func ExampleInsert() {
-	l := MakeList()
 	l.Insert(4, 0)
-	l.Print()
-	fmt.Println(l.Insert(4, 2))
-	l.Print()
-	l.Insert(5, 1)
-	l.Print()
-	l.Insert(6, 2)
-	l.Print()
-	l.Insert(3, 1)
-	l.Print()
-	l.Insert(8, 0)
-	l.Print()
 
-	// Output:
-	// ->4->
-	// false
-	// ->4->
-	// ->4->5->
-	// ->4->5->6->
-	// ->4->3->5->6->
-	// ->8->4->3->5->6->
+	l2 := MakeList()
+	l2.Prepend(4)
+
+	if !l.Compare(l2) {
+		t.Error("Inserting at index 0 should work like prepending")
+	}
+
+	if l.Insert(4, 2) {
+		t.Error("Inserting at index out of boundaries should return false")
+	}
+
+	l.Insert(5, 1)
+	l.Insert(6, 2)
+	l.Insert(3, 1)
+	l.Insert(8, 0)
+
+	l2.Append(3)
+	l2.Append(5)
+	l2.Append(6)
+	l2.Prepend(8)
+
+	if !l.Compare(l2) {
+		t.Error("Inserting failed")
+	}
 }
 
 func TestHasCycle1(t *testing.T) {
@@ -216,122 +215,126 @@ func TestHasCycle2(t *testing.T) {
 	}
 }
 
-func ExampleReverse() {
+func TestReverse(t *testing.T) {
 	l := MakeList()
 	l.Prepend(4)
 	l.Prepend(5)
 	l.Prepend(7)
 	l.Prepend(2)
-	l.Print()
 	l.Reverse()
-	l.Print()
 
-	// Output:
-	// ->2->7->5->4->
-	// ->4->5->7->2->
+	l2 := MakeList()
+	l2.Append(4)
+	l2.Append(5)
+	l2.Append(7)
+	l2.Append(2)
+
+	if !l.Compare(l2) {
+		t.Error("Reverse should reverse order of the list")
+	}
 }
 
-func ExampleCompare() {
+func TestCompare(t *testing.T) {
 	l := MakeList()
 	l2 := MakeList()
-	fmt.Println(l.Compare(l2))
+	if !l.Compare(l2) {
+		t.Error("Comparing empty lists failed")
+	}
 	l.Append(4)
-	fmt.Println(l.Compare(l2))
+	if l.Compare(l2) {
+		t.Error("Comparing <4> and <nil> failed")
+	}
 	l2.Append(4)
-	fmt.Println(l.Compare(l2))
+	if !l.Compare(l2) {
+		t.Error("Comparing <4> <4> failed")
+	}
 	l.Append(5)
-	fmt.Println(l.Compare(l2))
+	if l.Compare(l2) {
+		t.Error("Comparing <4,5> <4> failed")
+	}
 	l2.Append(5)
-	fmt.Println(l.Compare(l2))
+	if !l.Compare(l2) {
+		t.Error("Comparing <4,5> <4,5> failed")
+	}
 	l2.Append(7)
 	l.Append(8)
-	fmt.Println(l.Compare(l2))
-
-	// Output:
-	// true
-	// false
-	// true
-	// false
-	// true
-	// false
+	if l.Compare(l2) {
+		t.Error("Comparing <4,5,7> <4,5,8> failed")
+	}
 }
 
-func ExampleInsertSort() {
+func TestInsertAscending(t *testing.T) {
 	l := MakeList()
 
-	l.InsertSort(4)
-	l.Print()
-	l.InsertSort(7)
-	l.Print()
-	l.InsertSort(3)
-	l.Print()
-	l.InsertSort(8)
-	l.Print()
-	l.InsertSort(0)
-	l.Print()
-	l.InsertSort(5)
-	l.Print()
+	l.InsertAscending(4)
+	l.InsertAscending(7)
+	l.InsertAscending(3)
+	l.InsertAscending(8)
+	l.InsertAscending(0)
+	l.InsertAscending(5)
 
-	// Output:
-	// ->4->
-	// ->4->7->
-	// ->3->4->7->
-	// ->3->4->7->8->
-	// ->0->3->4->7->8->
-	// ->0->3->4->5->7->8->
+	l2 := MakeList()
+	l2.Append(0)
+	l2.Append(3)
+	l2.Append(4)
+	l2.Append(5)
+	l2.Append(7)
+	l2.Append(8)
+
+	if l.String() != l2.String() {
+		t.Error("InsertAscending should insert items in the ascending order")
+	}
 }
 
-func ExampleRemoveDuplicatesFromAscendingList() {
+func TestRemoveDuplicatesFromAscendingList(t *testing.T) {
 	l := MakeList()
+	l2 := MakeList()
 
 	l.RemoveDuplicatesFromAscendingList()
-	l.Print()
-	l.InsertSort(3)
-	l.RemoveDuplicatesFromAscendingList()
-	l.Print()
-	l.InsertSort(3)
-	l.Print()
-	l.RemoveDuplicatesFromAscendingList()
-	l.Print()
-	l.InsertSort(7)
-	l.RemoveDuplicatesFromAscendingList()
-	l.Print()
-	l.InsertSort(3)
-	l.Print()
-	l.RemoveDuplicatesFromAscendingList()
-	l.Print()
 
-	// Output:
-	// Empty list!
-	// ->3->
-	// ->3->3->
-	// ->3->
-	// ->3->7->
-	// ->3->3->7->
-	// ->3->7->
+	if !l.Compare(l2) {
+		t.Error("RemoveDuplicates should not take actions on empty list")
+	}
+	l.InsertAscending(3)
+	l.InsertAscending(3)
+	l.InsertAscending(7)
+	l.InsertAscending(3)
+	l.RemoveDuplicatesFromAscendingList()
+
+	l2.Prepend(3)
+	l2.Append(7)
+
+	if l.Compare(l2) {
+		t.Error("RemoveDuplicates failure")
+	}
+
 }
 
-func ExampleIsAscending() {
+func TestIsAscending(t *testing.T) {
 	l := MakeList()
-	fmt.Println(l.IsAscending())
+	if !l.IsAscending() {
+		t.Error("IsAscending on empty list failure")
+	}
 	l.Prepend(2)
-	fmt.Println(l.IsAscending())
+	if !l.IsAscending() {
+		t.Error("IsAscending on list with one element failure")
+	}
 	l.Prepend(4)
-	fmt.Println(l.IsAscending())
+	if l.IsAscending() {
+		t.Error("IsAscending on descending list failure")
+	}
 	l.Prepend(1)
-	fmt.Println(l.IsAscending())
+	if l.IsAscending() {
+		t.Error("IsAscending on unsorted list failure")
+	}
 	l.Delete(4)
-	fmt.Println(l.IsAscending())
+	if !l.IsAscending() {
+		t.Error("IsAscending on ascending list failure #1")
+	}
 	l.Append(5)
-	fmt.Println(l.IsAscending())
-
-	// Output:
-	// true
-	// true
-	// false
-	// false
-	// true
-	// true
+	if !l.IsAscending() {
+		t.Error("IsAscending on ascending list failure #2")
+	}
 }
 
 func TestGetKey(t *testing.T) {
@@ -401,7 +404,7 @@ func TestGetHead(t *testing.T) {
 	}
 }
 
-func TestSort(t *testing.T) {
+func TestSortAscending(t *testing.T) {
 	l := MakeList()
 	l.Prepend(4)
 	l.Prepend(7)
@@ -410,8 +413,7 @@ func TestSort(t *testing.T) {
 	l.Prepend(0)
 	l.Prepend(5)
 
-	l.SortSingleLinkedList()
-	l.Print()
+	l.SortAscending()
 
 	l2 := MakeList()
 	l2.Prepend(0)
@@ -420,9 +422,102 @@ func TestSort(t *testing.T) {
 	l2.Append(5)
 	l2.Append(7)
 	l2.Append(8)
-	l2.Print()
 
 	if !l.Compare(l2) {
 		t.Error("Sorting failed!")
+	}
+}
+
+func TestString(t *testing.T) {
+	l := MakeList()
+	if l.String() != "Empty list!" {
+		t.Error("String on empty list failed")
+		t.Error(l)
+	}
+
+	l.Prepend(5)
+	l.Append(7)
+	l.InsertAscending(6)
+	l.Insert(4, 0)
+
+	if l.String() != "->4->5->6->7->" {
+		t.Error("String failure")
+		t.Error(l)
+	}
+}
+
+func TestFindMiddle(t *testing.T) {
+	l := MakeList()
+	if l.head.findMiddle() != nil {
+		t.Error("Find middle failure on empty list")
+	}
+
+	l.Append(4)
+	if l.head.findMiddle() != l.head {
+		t.Error("Find middle on list with one node should return list's head")
+	}
+
+	l.Append(5)
+	if l.head.findMiddle() != l.head {
+		t.Error("Find middle on list with two nodes should return list's head")
+	}
+
+	l.Append(9)
+	if l.head.findMiddle() != l.head.next {
+		t.Error("Find middle on list with three nodes should return the second one")
+	}
+
+	l.Append(54)
+	if l.head.findMiddle() != l.head.next {
+		t.Error("Find middle on list with four nodes should return the second one")
+	}
+
+	l.Append(65)
+	if l.head.findMiddle() != l.head.next.next {
+		t.Error("Find middle on list with five nodes should return the third one")
+	}
+}
+
+func TestMergeAscendingLists(t *testing.T) {
+	n := makeNode(1)
+	n2 := makeNode(2)
+	if n.mergeAscendingLists(nil) != n {
+		t.Error("merge list with nil failure")
+	}
+
+	n.next = makeNode(5)
+	n2.next = makeNode(6)
+
+	l := MakeList()
+	l.head = n.mergeAscendingLists(n2)
+
+	if l.String() != "->1->2->5->6->" {
+		t.Error("Merge lists failure")
+	}
+}
+
+func TestSortAscending2(t *testing.T) {
+	var n *Node
+	if n != n.sortAscending() {
+		t.Error("sortAscending should return nil on empty list")
+	}
+
+	n = makeNode(4)
+	if n != n.sortAscending() {
+		t.Error("sortAscending on list with one node should return the node")
+	}
+
+	n.next = makeNode(6)
+	n.next.next = makeNode(2)
+	n.next.next.next = makeNode(1)
+
+	n = n.sortAscending()
+
+	l := MakeList()
+	l.head = n
+
+	if l.String() != "->1->2->4->6->" {
+		t.Error("sortAscending should sort linked list in ascending order")
+		t.Log(l)
 	}
 }

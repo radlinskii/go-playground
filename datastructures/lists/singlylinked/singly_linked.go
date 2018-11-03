@@ -37,19 +37,18 @@ func (l *List) GetHead() *Node {
 	return l.head
 }
 
-// Print prints keys of elements of the list.
-func (l *List) Print() {
+func (l *List) String() string {
 	x := l.head
 	if x == nil {
-		fmt.Println("Empty list!")
-	} else {
-		fmt.Print("->")
-		for x != nil {
-			fmt.Printf("%d->", x.key)
-			x = x.next
-		}
-		fmt.Println()
+		return "Empty list!"
 	}
+	s := ""
+	s += "->"
+	for x != nil {
+		s += fmt.Sprintf("%d->", x.key)
+		x = x.next
+	}
+	return s
 }
 
 // Prepend is adding node with a given value at the head of the list.
@@ -138,9 +137,9 @@ func (l *List) Insert(v, pos int) bool {
 	return true
 }
 
-// InsertSort inserts a node with given values inside the list
+// InsertAscending inserts a node with given values inside the list
 // in such position that keeps list in ascending order.
-func (l *List) InsertSort(v int) {
+func (l *List) InsertAscending(v int) {
 	if l.head == nil || l.head.key > v {
 		l.Prepend(v)
 		return
@@ -243,32 +242,34 @@ func (l *List) RemoveDuplicatesFromAscendingList() {
 	}
 }
 
-func (l *List) SortSingleLinkedList() {
-	l.head = l.head.SortAscending()
+// SortAscending should sort singly linked list in ascending order.
+func (l *List) SortAscending() {
+	l.head = l.head.sortAscending()
 }
 
-func (l *Node) SortAscending() *Node {
-	if l == nil || l.next == nil {
-		return l
+func (n *Node) sortAscending() *Node {
+	if n == nil || n.next == nil {
+		return n
 	}
 	//List *middle, *middleNext
-	middle := l.FindMiddle()
+	middle := n.findMiddle()
 	middleNext := middle.next
 	middle.next = nil
 
 	//List *left, *right, *head
-	left := l.SortAscending()
-	right := middleNext.SortAscending()
-	head := left.MergeSortedLists(right)
+	left := n.sortAscending()
+	right := middleNext.sortAscending()
+	head := left.mergeAscendingLists(right)
 	return head
 }
-func (l *Node) FindMiddle() *Node {
-	if l == nil {
+
+func (n *Node) findMiddle() *Node {
+	if n == nil {
 		return nil
 	}
-	//var slow, fast *List
-	slow := l
-	fast := l
+
+	slow := n
+	fast := n
 
 	for fast != nil {
 		fast = fast.next
@@ -281,16 +282,17 @@ func (l *Node) FindMiddle() *Node {
 	}
 	return slow
 }
-func (headA *Node) MergeSortedLists(headB *Node) *Node {
-	if headA == nil {
+
+func (n *Node) mergeAscendingLists(headB *Node) *Node {
+	if n == nil {
 		return headB
 	}
 	if headB == nil {
-		return headA
+		return n
 	}
 	var head, h *Node
-	for headA != nil && headB != nil {
-		if headA.key > headB.key {
+	for n != nil && headB != nil {
+		if n.key > headB.key {
 			if h == nil {
 				h = headB
 				head = headB
@@ -301,23 +303,19 @@ func (headA *Node) MergeSortedLists(headB *Node) *Node {
 			headB = headB.next
 		} else {
 			if h == nil {
-				h = headA
-				head = headA
+				h = n
+				head = n
 			} else {
-				h.next = headA
+				h.next = n
 				h = h.next
 			}
-			headA = headA.next
+			n = n.next
 		}
 	}
-	if headA != nil {
-		h.next = headA
+	if n != nil {
+		h.next = n
 	} else {
 		h.next = headB
 	}
 	return head
 }
-
-// MergeAscendingLists
-
-// SortAscending
