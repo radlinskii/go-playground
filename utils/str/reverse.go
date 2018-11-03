@@ -8,3 +8,11 @@ func Reverse(s string) string {
 	}
 	return string(r)
 }
+
+// ReverseRecursively takes a string and returns its reversed copy. Recursively.
+func ReverseRecursively(s string) string {
+	if len(s) <= 1 {
+		return s
+	}
+	return ReverseRecursively(s[1:len(s)]) + string(s[0])
+}
