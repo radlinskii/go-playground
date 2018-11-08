@@ -69,7 +69,7 @@ func TestTop(t *testing.T) {
 	}
 }
 
-func TetstString(t *testing.T) {
+func TestString(t *testing.T) {
 	s := MakeStack()
 	got := s.String()
 	expected := "Empty stack!"
