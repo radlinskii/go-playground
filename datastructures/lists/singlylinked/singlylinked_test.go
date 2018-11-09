@@ -521,3 +521,22 @@ func TestSortAscending2(t *testing.T) {
 		t.Log(l)
 	}
 }
+
+func TestGetTail(t *testing.T) {
+	l := MakeList()
+	if l.GetTail() != nil {
+		t.Error("GetTail should return nil when called on empty list")
+	}
+	l.Prepend(3)
+	if l.GetTail() != l.GetHead() {
+		t.Error("GetTail on list with one node should return list's head")
+	}
+	l.Prepend(4)
+	if l.GetTail() != l.GetHead().next {
+		t.Error("GetTail on list with two elements should return the second one")
+	}
+	l.Prepend(7)
+	if l.GetTail() != l.GetHead().next.next {
+		t.Error("GetTail on list with three elements should return the third one")
+	}
+}

@@ -51,6 +51,17 @@ func (l *List) String() string {
 	return s
 }
 
+// GetTail returns the last node from the list
+func (l *List) GetTail() *Node {
+	x := l.head
+	if l.head != nil {
+		for x.next != nil {
+			x = x.next
+		}
+	}
+	return x
+}
+
 // Prepend is adding node with a given value at the head of the list.
 func (l *List) Prepend(v int) {
 	n := makeNode(v)
