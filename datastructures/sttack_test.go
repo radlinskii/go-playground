@@ -40,7 +40,7 @@ func TestPop(t *testing.T) {
 	}
 }
 
-func TestIsEmpty(t *testing.T) {
+func TestIsStackEmpty(t *testing.T) {
 	s := MakeStack()
 	if !s.IsEmpty() {
 		t.Error("IsEmpty should return true on empty stack")
@@ -69,7 +69,7 @@ func TestTop(t *testing.T) {
 	}
 }
 
-func TestString(t *testing.T) {
+func TestStackString(t *testing.T) {
 	s := MakeStack()
 	got := s.String()
 	expected := "Empty stack!"
