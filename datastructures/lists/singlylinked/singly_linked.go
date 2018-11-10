@@ -4,16 +4,16 @@ import "fmt"
 
 // Node type is a node of singly linked list.
 type Node struct {
-	key  int
+	key  float32
 	next *Node
 }
 
-func makeNode(v int) *Node {
+func makeNode(v float32) *Node {
 	return &Node{key: v, next: nil}
 }
 
 // GetKey is a getter for the key property of a node.
-func (n *Node) GetKey() int {
+func (n *Node) GetKey() float32 {
 	return n.key
 }
 
@@ -45,7 +45,7 @@ func (l *List) String() string {
 	s := ""
 	s += "->"
 	for x != nil {
-		s += fmt.Sprintf("%d->", x.key)
+		s += fmt.Sprintf("%.2f->", x.key)
 		x = x.next
 	}
 	return s
@@ -63,7 +63,7 @@ func (l *List) GetTail() *Node {
 }
 
 // Prepend is adding node with a given value at the head of the list.
-func (l *List) Prepend(v int) {
+func (l *List) Prepend(v float32) {
 	n := makeNode(v)
 
 	n.next = l.head
@@ -71,7 +71,7 @@ func (l *List) Prepend(v int) {
 }
 
 // Append should add an item at the end of the list.
-func (l *List) Append(v int) {
+func (l *List) Append(v float32) {
 	x := l.head
 	if x == nil {
 		l.Prepend(v)
@@ -94,7 +94,7 @@ func (l *List) Pop() *Node {
 }
 
 // Search finds the first element with given value as its key.
-func (l *List) Search(v int) *Node {
+func (l *List) Search(v float32) *Node {
 	x := l.head
 	for x != nil && x.key != v {
 		x = x.next
@@ -104,7 +104,7 @@ func (l *List) Search(v int) *Node {
 
 // Delete removes from a list first node of a given value.
 // It returns true if node was deleted, false otherwise.
-func (l *List) Delete(v int) bool {
+func (l *List) Delete(v float32) bool {
 	x := l.head
 	if x == nil {
 		return false
@@ -125,7 +125,7 @@ func (l *List) Delete(v int) bool {
 
 // Insert inserts a node with given value at given position.
 // It returns true if node was inserted, false otherwise.
-func (l *List) Insert(v, pos int) bool {
+func (l *List) Insert(v float32, pos int) bool {
 	if pos < 0 {
 		return false
 	}
@@ -150,7 +150,7 @@ func (l *List) Insert(v, pos int) bool {
 
 // InsertAscending inserts a node with given values inside the list
 // in such position that keeps list in ascending order.
-func (l *List) InsertAscending(v int) {
+func (l *List) InsertAscending(v float32) {
 	if l.head == nil || l.head.key > v {
 		l.Prepend(v)
 		return

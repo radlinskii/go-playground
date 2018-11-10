@@ -85,7 +85,7 @@ func TestQueueString(t *testing.T) {
 	q.Enqueue(5)
 	q.Enqueue(7)
 	got = q.String()
-	expected = "->4->5->7->"
+	expected = "->4.00->5.00->7.00->"
 	if got != expected {
 		t.Errorf("expected: %q, got: %q", expected, got)
 	}
@@ -94,7 +94,7 @@ func TestQueueString(t *testing.T) {
 	q.Dequeue()
 
 	got = q.String()
-	expected = "->7->"
+	expected = "->7.00->"
 	if got != expected {
 		t.Errorf("expected: %q, got: %q", expected, got)
 	}
