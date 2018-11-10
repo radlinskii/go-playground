@@ -7,8 +7,8 @@ import (
 func TestMakeNode(t *testing.T) {
 	var testsTable = []struct {
 		name     string
-		key      int
-		expected int
+		key      float32
+		expected float32
 	}{
 		{"negative number", -321, -321},
 		{"zero", 0, 0},
@@ -19,7 +19,7 @@ func TestMakeNode(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			got := makeNode(test.key)
 			if got.key != test.expected {
-				t.Errorf("makeNode(%d): expected: %d got %d", test.key, got.key, test.expected)
+				t.Errorf("makeNode(%f): expected: %f got %f", test.key, got.key, test.expected)
 			}
 
 			if got.next != nil {
@@ -341,7 +341,7 @@ func TestGetKey(t *testing.T) {
 	var testsTable = []struct {
 		name     string
 		node     Node
-		expected int
+		expected float32
 	}{
 		{"positive number #1", Node{4, nil}, 4},
 		{"positive number #2", Node{32321, nil}, 32321},
@@ -353,7 +353,7 @@ func TestGetKey(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			got := test.node.GetKey()
 			if got != test.expected {
-				t.Errorf("%v.GetKey(): expected: %d got: %d", test.node, got, test.expected)
+				t.Errorf("%v.GetKey(): expected: %f got: %f", test.node, got, test.expected)
 			}
 		})
 	}
@@ -440,7 +440,7 @@ func TestString(t *testing.T) {
 	l.InsertAscending(6)
 	l.Insert(4, 0)
 
-	if l.String() != "->4->5->6->7->" {
+	if l.String() != "->4.00->5.00->6.00->7.00->" {
 		t.Error("String failure")
 		t.Error(l)
 	}
@@ -491,7 +491,7 @@ func TestMergeAscendingLists(t *testing.T) {
 	l := MakeList()
 	l.head = n.mergeAscendingLists(n2)
 
-	if l.String() != "->1->2->5->6->" {
+	if l.String() != "->1.00->2.00->5.00->6.00->" {
 		t.Error("Merge lists failure")
 	}
 }
@@ -516,7 +516,7 @@ func TestSortAscending2(t *testing.T) {
 	l := MakeList()
 	l.head = n
 
-	if l.String() != "->1->2->4->6->" {
+	if l.String() != "->1.00->2.00->4.00->6.00->" {
 		t.Error("sortAscending should sort linked list in ascending order")
 		t.Log(l)
 	}

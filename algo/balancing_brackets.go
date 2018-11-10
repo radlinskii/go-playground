@@ -14,10 +14,10 @@ func IsBalanced(s string) bool {
 	if len(s) == 1 {
 		return false
 	}
-	stack.Push(int(s[0]))
+	stack.Push(float32(s[0]))
 	for _, v := range s[1:len(s)] {
 		if v == 123 || v == 40 || v == 91 {
-			stack.Push(int(v))
+			stack.Push(float32(v))
 		} else {
 			if v == 125 { // }
 				if stack.IsEmpty() || stack.Top().GetKey() != 123 { // {

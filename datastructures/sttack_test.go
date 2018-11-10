@@ -81,7 +81,7 @@ func TestStackString(t *testing.T) {
 	s.Push(5)
 	s.Push(7)
 	got = s.String()
-	expected = "->7->5->4->"
+	expected = "->7.00->5.00->4.00->"
 	if got != expected {
 		t.Errorf("expected: %s, got: %s", expected, got)
 	}
@@ -90,7 +90,7 @@ func TestStackString(t *testing.T) {
 	s.Pop()
 
 	got = s.String()
-	expected = "->4->"
+	expected = "->4.00->"
 	if got != expected {
 		t.Errorf("expected: %s, got: %s", expected, got)
 	}

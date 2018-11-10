@@ -16,7 +16,7 @@ func MakeStack() *Stack {
 }
 
 // Push inserts an element of given value at the top of the stack.
-func (s *Stack) Push(v int) {
+func (s *Stack) Push(v float32) {
 	s.list.Prepend(v)
 }
 

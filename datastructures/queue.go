@@ -16,7 +16,7 @@ func MakeQueue() *Queue {
 }
 
 // Enqueue ads an element at the of the queue.
-func (q *Queue) Enqueue(v int) {
+func (q *Queue) Enqueue(v float32) {
 	q.list.Append(v)
 }
 
