@@ -114,3 +114,33 @@ func (l *List) Delete(n *Node) {
 		n.next.prev = n.prev
 	}
 }
+
+// HasCycle checks if there is a cycle in the list.
+func (l *List) HasCycle() bool {
+	if l.head == nil {
+		return false
+	}
+
+	slow := l.head
+	fast := l.head.next
+	for fast != slow {
+		if fast == nil || fast.next == nil {
+			return false
+		}
+		slow = slow.next
+		fast = fast.next.next
+	}
+	return true
+}
+
+// Reverse reverses the order of the list.
+func (l *List) Reverse() {
+	var tmp *Node
+	curr := l.head
+	for curr != nil {
+		tmp = curr.next
+		curr.prev, curr.next = curr.next, curr.prev
+		curr = tmp
+	}
+	l.head, l.tail = l.tail, l.head
+}

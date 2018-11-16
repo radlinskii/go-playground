@@ -1,6 +1,9 @@
 package doublylinked
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestMakeNode(t *testing.T) {
 	var testsTable = []struct {
@@ -235,4 +238,47 @@ func TestDelete(t *testing.T) {
 	if l.head != nil {
 		t.Error("Delete should remove last element from the list")
 	}
+}
+
+func TestHasCycle1(t *testing.T) {
+	l := MakeList()
+	if l.HasCycle() {
+		t.Error("HasCycle shouldn't detect a cycle without a reason")
+	}
+	l.Prepend(2)
+	l.Prepend(3)
+	l.Prepend(4)
+
+	if l.HasCycle() {
+		t.Error("HasCycle shouldn't detect a cycle without a reason")
+	}
+}
+
+func TestHasCycle2(t *testing.T) {
+	l := MakeList()
+
+	l.Prepend(3)
+	l.Prepend(4)
+	l.Prepend(5)
+	n := l.Search(3)
+	n.next = l.head
+
+	if !l.HasCycle() {
+		t.Error("HasCycle should properly detect a cycle")
+	}
+}
+
+func ExampleReverse() {
+	l := MakeList()
+	l.Prepend(4)
+	l.Prepend(5)
+	l.Prepend(7)
+	l.Prepend(2)
+	fmt.Println(l)
+	l.Reverse()
+	fmt.Println(l)
+
+	// Output:
+	// ->2.00->7.00->5.00->4.00->
+	// ->4.00->5.00->7.00->2.00->
 }
