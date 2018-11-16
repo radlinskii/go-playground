@@ -1,6 +1,9 @@
 package datastructures
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestMakeStack(t *testing.T) {
 	s := MakeStack()
@@ -94,5 +97,23 @@ func TestStackString(t *testing.T) {
 	if got != expected {
 		t.Errorf("expected: %s, got: %s", expected, got)
 	}
+}
 
+func ExampleStackSortAscending() {
+	s := MakeStack()
+
+	s.Push(5)
+	s.Push(3)
+	s.Push(6)
+	s.Push(2)
+	s.Push(8)
+
+	fmt.Println(s)
+
+	s.SortAscending()
+	fmt.Println(s)
+
+	// Output:
+	// ->8.00->2.00->6.00->3.00->5.00->
+	// ->2.00->3.00->5.00->6.00->8.00->
 }

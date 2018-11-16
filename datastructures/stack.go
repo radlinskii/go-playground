@@ -41,3 +41,18 @@ func (s *Stack) String() string {
 	}
 	return s.list.String()
 }
+
+// SortAscending sorts the elements of the stack in ascending order.
+func (s *Stack) SortAscending() {
+	tmp := MakeStack()
+	var curr *singlylinked.Node
+	for !s.IsEmpty() {
+		curr = s.Pop()
+		for !tmp.IsEmpty() && tmp.Top().GetKey() <= curr.GetKey() {
+			s.Push(tmp.Pop().GetKey())
+		}
+		tmp.Push(curr.GetKey())
+
+	}
+	s.list = tmp.list
+}
