@@ -41,21 +41,3 @@ func (l *list) print() {
 		n = n.next
 	}
 }
-
-func (l *list) removeDuplicates1() {
-	n := l.head
-	if n == nil || n.next == nil {
-		return
-	}
-	m := make(map[int]bool)
-	m[n.data] = true
-	for n.next.next != nil {
-		if _, ok := m[n.next.data]; !ok {
-			m[n.next.data] = true
-		} else {
-			n.next = n.next.next
-		}
-		n = n.next
-	}
-	fmt.Println(m)
-}
