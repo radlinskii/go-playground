@@ -24,14 +24,14 @@ func home(w http.ResponseWriter, req *http.Request) {
 			fmt.Fprintln(w, `<h2>No counter cookie found!</h2>`)
 		} else {
 			http.Error(w, "Server Error!", http.StatusInternalServerError)
-			fmt.Errorf("Server Error: %s", err.Error())
+			_ = fmt.Errorf("Server Error: %s", err.Error())
 			return
 		}
 	} else {
 		count, err := strconv.Atoi(cookie.Value)
 		if err != nil {
 			http.Error(w, "Server Error!", http.StatusInternalServerError)
-			fmt.Errorf("Server Error: %s", err.Error())
+			_ = fmt.Errorf("Server Error: %s", err.Error())
 			return
 		}
 
@@ -59,7 +59,7 @@ func addValueToCounterCookie(w *http.ResponseWriter, req *http.Request, value in
 			cookie = &http.Cookie{Name: "counter", Value: "0", MaxAge: 3600}
 		} else {
 			http.Error(*w, "Server Error!", http.StatusInternalServerError)
-			fmt.Errorf("Server Error: %s", err.Error())
+			_ = fmt.Errorf("Server Error: %s", err.Error())
 			return
 		}
 	}
@@ -67,7 +67,7 @@ func addValueToCounterCookie(w *http.ResponseWriter, req *http.Request, value in
 	count, err := strconv.Atoi(cookie.Value)
 	if err != nil {
 		http.Error(*w, "Server Error!", http.StatusInternalServerError)
-		fmt.Errorf("Server Error: %s", err.Error())
+		_ = fmt.Errorf("Server Error: %s", err.Error())
 		return
 	}
 
