@@ -76,24 +76,19 @@ func decode(w http.ResponseWriter, r *http.Request) {
 }
 
 func get(w http.ResponseWriter, r *http.Request) {
-	// var c catto
 	resp, err := http.Get("http://localhost:8080/marshal")
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	j := make([]byte, resp.ContentLength)
-	fmt.Printf("s: %s\n len: %d\n type: %T\n", j, len(j), j)
+
+	defer resp.Body.Close()
 
 	_, err = resp.Body.Read(j)
 	if err != io.EOF {
 		fmt.Println(err)
 	}
 
-	s := string(j)
-
-	fmt.Printf("s: %s\n len: %d\n type: %T\n", s, len(s), s)
-	fmt.Printf("s: %s\n len: %d\n type: %T\n", j, len(j), j)
-
-	fmt.Println(s)
+	fmt.Println(string(j))
 }
