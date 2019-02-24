@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	_ "github.com/lib/pq"
 )
@@ -39,29 +40,47 @@ type author struct {
 
 func main() {
 	defer db.Close()
-	http.HandleFunc("/api/v1/authors", authors)
+	// http.HandleFunc("/api/v1/authors", handleAuthorsRoute) TODO can I omit 301?
+	http.HandleFunc("/api/v1/authors/", handleAuthorRoute)
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func authors(w http.ResponseWriter, r *http.Request) {
+func handleAuthorRoute(w http.ResponseWriter, r *http.Request) {
+	path := r.URL.Path
+	urlparam := strings.Split(path, "/api/v1/authors/")[1]
+
+	if urlparam == "" {
+		handleAuthorsRoute(w, r)
+		return
+	}
+
+	idparam, err := strconv.Atoi(urlparam)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		return
+	}
+
 	switch {
 	case r.Method == http.MethodGet:
-		val := r.FormValue("id")
-		if val == "" {
-			getAllAuthors(w, r)
-			return
-		}
+		getAuthorByID(w, r, idparam)
+		return
+	case r.Method == http.MethodPut:
+		updateAuthor(w, r, idparam)
+		return
+	}
 
-		id, err := strconv.Atoi(val)
-		if err != nil {
-			log.Print(err)
-			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-			return
-		}
+	log.Println("error: author/:id ", http.StatusMethodNotAllowed)
+	http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+	return
+}
 
-		getAuthorByID(w, r, id)
+func handleAuthorsRoute(w http.ResponseWriter, r *http.Request) {
+	switch {
+	case r.Method == http.MethodGet:
+		getAllAuthors(w, r)
 		return
 	case r.Method == http.MethodPost:
 		createAuthor(w, r)
@@ -71,6 +90,53 @@ func authors(w http.ResponseWriter, r *http.Request) {
 	log.Println("error: authors ", http.StatusMethodNotAllowed)
 	http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 	return
+}
+
+// curl -i -X PUT -d "id=4&firstName=marcelina&lastName=radlinska&phoneNumber=+4865423322&age=25&description=author number 4" localhost:8080/api/v1/authors/5
+func updateAuthor(w http.ResponseWriter, r *http.Request, id int) {
+	a := author{}
+	ageval := r.FormValue("age")
+	a.Fname = r.FormValue("firstName")
+	a.Lname = r.FormValue("lastName")
+	a.Phone = r.FormValue("phoneNumber")
+	a.Description = r.FormValue("description")
+
+	if a.Fname == "" || a.Lname == "" || a.Phone == "" || a.Description == "" || ageval == "" {
+		http.Error(w, http.StatusText(http.StatusNotAcceptable), http.StatusNotAcceptable)
+		return
+	}
+
+	age, err := strconv.Atoi(ageval)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, http.StatusText(http.StatusNotAcceptable), http.StatusNotAcceptable)
+		return
+	}
+
+	a.Age = age
+
+	result, err := db.Exec(`UPDATE authors SET
+	first_name = $1, last_name = $2, phone_number = $3, age = $4, description = $5
+	WHERE author_id = $6;`, a.Fname, a.Lname, a.Phone, a.Age, a.Description, id)
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	rows, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	if rows != 1 {
+		log.Println("No rows updated.")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusAccepted)
 }
 
 //  curl -i -X POST -d "id=4&firstName=marcelina&lastName=radlinska&phoneNumber=+4865423322&age=25&description=author number 4" localhost:8080/api/v1/authors
@@ -97,7 +163,7 @@ func createAuthor(w http.ResponseWriter, r *http.Request) {
 	a.Age = age
 
 	result, err := db.Exec(`INSERT INTO authors
-	(first_name, last_name, phone_number, age, description) values
+	(first_name, last_name, phone_number, age, description) VALUES
 	($1, $2, $3, $4, $5);`, a.Fname, a.Lname, a.Phone, a.Age, a.Description)
 
 	if err != nil {
@@ -105,6 +171,7 @@ func createAuthor(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
+
 	rows, err := result.RowsAffected()
 	if err != nil {
 		log.Println(err)
@@ -120,9 +187,10 @@ func createAuthor(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
+// curl -i -X GET localhost:8080/api/v1/authors/
 func getAllAuthors(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	q := `SELECT * from authors;`
+	q := `SELECT * FROM authors;`
 
 	rows, err := db.Query(q)
 	if err != nil {
@@ -157,9 +225,10 @@ func getAllAuthors(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// curl -i -X GET localhost:8080/api/v1/authors/1
 func getAuthorByID(w http.ResponseWriter, r *http.Request, id int) {
 	w.Header().Set("Content-Type", "application/json")
-	q := `SELECT * from authors where author_id = $1 ;`
+	q := `SELECT * FROM authors WHERE author_id = $1 ;`
 
 	row := db.QueryRow(q, id)
 
@@ -168,7 +237,7 @@ func getAuthorByID(w http.ResponseWriter, r *http.Request, id int) {
 	switch {
 	case err == sql.ErrNoRows:
 		log.Print(err)
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 		return
 	case err != nil:
 		log.Print(err)
