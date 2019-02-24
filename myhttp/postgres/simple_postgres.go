@@ -70,6 +70,9 @@ func handleAuthorRoute(w http.ResponseWriter, r *http.Request) {
 	case r.Method == http.MethodPut:
 		updateAuthor(w, r, idparam)
 		return
+	case r.Method == http.MethodDelete:
+		deleteAuthor(w, r, idparam)
+		return
 	}
 
 	log.Println("error: author/:id ", http.StatusMethodNotAllowed)
@@ -132,6 +135,30 @@ func updateAuthor(w http.ResponseWriter, r *http.Request, id int) {
 	}
 	if rows != 1 {
 		log.Println("No rows updated.")
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusAccepted)
+}
+
+// curl -i -X DELETE localhost:8080/api/v1/authors/5
+func deleteAuthor(w http.ResponseWriter, r *http.Request, id int) {
+	result, err := db.Exec(`DELETE FROM authors WHERE author_id = $1;`, id)
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	rows, err := result.RowsAffected()
+	if err != nil {
+		log.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	if rows != 1 {
+		log.Println("No rows deleted.")
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
