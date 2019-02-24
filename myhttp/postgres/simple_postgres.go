@@ -16,7 +16,7 @@ var db *sql.DB
 
 func init() {
 	var err error
-	db, err = sql.Open("postgres", "postgres://ignacyradlinski:@localhost/iconomy?sslmode=disable")
+	db, err = sql.Open("postgres", "postgres://ignacyradlinski:@localhost/iconomy?sslmode=disable") // TODO .env file?
 	if err != nil {
 		log.Fatal(err)
 	}
