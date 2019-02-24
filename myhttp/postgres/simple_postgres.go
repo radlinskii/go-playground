@@ -40,7 +40,6 @@ type author struct {
 
 func main() {
 	defer db.Close()
-	// http.HandleFunc("/api/v1/authors", handleAuthorsRoute) TODO can I omit 301?
 	http.HandleFunc("/api/v1/authors/", handleAuthorRoute)
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 
@@ -52,7 +51,17 @@ func handleAuthorRoute(w http.ResponseWriter, r *http.Request) {
 	urlparam := strings.Split(path, "/api/v1/authors/")[1]
 
 	if urlparam == "" {
-		handleAuthorsRoute(w, r)
+		switch {
+		case r.Method == http.MethodGet:
+			getAllAuthors(w, r)
+			return
+		case r.Method == http.MethodPost:
+			createAuthor(w, r)
+			return
+		}
+
+		log.Println("error: author ", http.StatusMethodNotAllowed)
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
 	}
 
@@ -76,21 +85,6 @@ func handleAuthorRoute(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Println("error: author/:id ", http.StatusMethodNotAllowed)
-	http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-	return
-}
-
-func handleAuthorsRoute(w http.ResponseWriter, r *http.Request) {
-	switch {
-	case r.Method == http.MethodGet:
-		getAllAuthors(w, r)
-		return
-	case r.Method == http.MethodPost:
-		createAuthor(w, r)
-		return
-	}
-
-	log.Println("error: authors ", http.StatusMethodNotAllowed)
 	http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 	return
 }
