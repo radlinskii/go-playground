@@ -12,7 +12,7 @@ CREATE TABLE authors (
 
 CREATE TABLE icons (
   icon_id serial primary key,
-  author_id int not null references authors,
+  author_id int references authors,
   description text,
   url text
 );
@@ -26,7 +26,8 @@ insert into icons (author_id, description, url) values
 (1, 'icon 1', 'http://localhost:8080/whatever1'),
 (2, 'icon 2', 'http://localhost:8080/whatever2'),
 (2, 'icon 3', 'http://localhost:8080/whatever3'),
-(1, 'icon 4', 'http://localhost:8080/whatever4');
+(1, 'icon 4', 'http://localhost:8080/whatever4'),
+(default, 'icon 5 - icon without an author', 'http://localhost:8080/whatever5');
 
 select * from authors;
 select * from icons;
