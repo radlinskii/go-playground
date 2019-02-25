@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"strings"
@@ -25,6 +26,7 @@ func main() {
 	http.HandleFunc("/unmarshal", unmarshal)
 	http.HandleFunc("/encode", encode)
 	http.HandleFunc("/decode", decode)
+	http.HandleFunc("/get", get)
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -71,4 +73,22 @@ func decode(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(c)
 	w.WriteHeader(http.StatusOK)
+}
+
+func get(w http.ResponseWriter, r *http.Request) {
+	resp, err := http.Get("http://localhost:8080/marshal")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	j := make([]byte, resp.ContentLength)
+
+	defer resp.Body.Close()
+
+	_, err = resp.Body.Read(j)
+	if err != io.EOF {
+		fmt.Println(err)
+	}
+
+	fmt.Println(string(j))
 }
