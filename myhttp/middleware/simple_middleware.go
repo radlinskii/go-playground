@@ -5,13 +5,14 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 )
 
 type middleware func(http.Handler) http.Handler
 
-func notify1() middleware {
+func useLogMiddleware() middleware {
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			log.Println("before1")
@@ -21,27 +22,33 @@ func notify1() middleware {
 	}
 }
 
-func notify2() middleware {
+func useCustomLoggerMiddleware(logger *log.Logger) middleware {
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			log.Println("before2")
-			defer log.Println("after2")
+			logger.Println("before2")
+			defer logger.Println("after2")
 			h.ServeHTTP(w, r)
 		})
 	}
 }
 
-func wrap(h http.Handler, adapters ...middleware) http.Handler {
-	for _, adapter := range adapters {
-		h = adapter(h)
+func applyMiddlewares(h http.Handler, middlewares ...middleware) http.Handler {
+	if len(middlewares) == 0 {
+		panic("applyMiddlewares used withour a reason")
+	}
+
+	for _, middleware := range middlewares {
+		h = middleware(h)
 	}
 	return h
 }
 
 func main() {
-	http.Handle("/", wrap(http.HandlerFunc(indexHandler), notify1()))
-	http.Handle("/foo", wrap(http.HandlerFunc(fooHandler), notify1(), notify2()))
-	http.Handle("/foo/", wrap(http.HandlerFunc(bazzHandler))) // /foo/:id
+	logger := log.New(os.Stdout, "server: ", log.Lshortfile|log.Ldate|log.Lmicroseconds)
+
+	http.Handle("/", applyMiddlewares(http.HandlerFunc(indexHandler), useLogMiddleware()))
+	http.Handle("/foo", applyMiddlewares(http.HandlerFunc(fooHandler), useLogMiddleware(), useCustomLoggerMiddleware(logger)))
+	http.HandleFunc("/foo/", bazzHandler) // /foo/:id
 	http.HandleFunc("/bar", barHandler)
 
 	http.Handle("/favicon.ico", http.NotFoundHandler())
@@ -76,7 +83,7 @@ func bazzHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println(idparam)
-	w.Write([]byte("hello id = " + strconv.Itoa(idparam) + "!"))
+	w.Write([]byte("well, hello there id = " + strconv.Itoa(idparam) + "!"))
 }
 
 func barHandler(w http.ResponseWriter, r *http.Request) {
