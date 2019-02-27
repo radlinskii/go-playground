@@ -1,65 +1,112 @@
 package main
 
 import (
+	"compress/gzip"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type middleware func(http.Handler) http.Handler
 
-func notify1() middleware {
+func useGZipMiddleware() middleware { // TODO encode with gzip only if response is bigger than 1400B
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			log.Println("before1")
-			defer log.Println("after1")
-			h.ServeHTTP(w, r)
+			log.Println("before gzip")
+			encodings := r.Header.Get("Accept-Encoding")
+			if !strings.Contains(encodings, "gzip") {
+				h.ServeHTTP(w, r)
+				return
+			}
+			w.Header().Add("Content-Encoding", "gzip")
+			gw := gzip.NewWriter(w)
+			defer gw.Close()
+			grw := gzipResponseWriter{
+				ResponseWriter: w,
+				Writer:         gw,
+			}
+			h.ServeHTTP(grw, r)
+			log.Println("after gzip")
 		})
 	}
 }
 
-func notify2() middleware {
+type gzipResponseWriter struct {
+	http.ResponseWriter
+	io.Writer
+}
+
+func (grw gzipResponseWriter) Write(data []byte) (int, error) {
+	log.Println("gzip")
+	return grw.Writer.Write(data)
+}
+
+func useDurationMiddleware() middleware {
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			log.Println("before2")
-			defer log.Println("after2")
+			log.Println("before duration")
+			t1 := time.Now()
 			h.ServeHTTP(w, r)
+			log.Println(time.Now().Sub(t1))
+			log.Println("after duration")
 		})
 	}
 }
 
-func wrap(h http.Handler, adapters ...middleware) http.Handler {
-	for _, adapter := range adapters {
-		h = adapter(h)
+func useCustomLoggerMiddleware(logger *log.Logger) middleware {
+	return func(h http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			log.Println("before logger")
+			logger.Printf("%s %s \n", r.Method, r.URL.Path)
+			h.ServeHTTP(w, r)
+			log.Println("after logger")
+		})
+	}
+}
+
+func applyMiddlewares(h http.Handler, middlewares ...middleware) http.Handler {
+	if len(middlewares) == 0 {
+		panic("applyMiddlewares used withour a reason")
+	}
+
+	l := len(middlewares)
+	for i := range middlewares {
+		h = middlewares[l-i-1](h)
 	}
 	return h
 }
 
 func main() {
-	http.Handle("/", wrap(http.HandlerFunc(indexHandler), notify1()))
-	http.Handle("/foo", wrap(http.HandlerFunc(fooHandler), notify1(), notify2()))
-	http.Handle("/foo/", wrap(http.HandlerFunc(bazzHandler))) // /foo/:id
+	logger := log.New(os.Stdout, "server: ", log.Lshortfile|log.Ldate|log.Lmicroseconds)
+
+	http.Handle("/", applyMiddlewares(http.HandlerFunc(indexHandler), useDurationMiddleware()))
+	http.Handle("/foo", applyMiddlewares(http.HandlerFunc(fooHandler), useDurationMiddleware(), useCustomLoggerMiddleware(logger)))
+	http.HandleFunc("/foo/", bazzHandler) // /foo/:id
 	http.HandleFunc("/bar", barHandler)
+	http.Handle("/get/doggo-with-compression", applyMiddlewares(http.HandlerFunc(getDoggo), useDurationMiddleware(), useCustomLoggerMiddleware(logger), useGZipMiddleware()))
+	http.Handle("/get/doggo-without-compression", applyMiddlewares(http.HandlerFunc(getDoggo), useDurationMiddleware(), useCustomLoggerMiddleware(logger)))
 
 	http.Handle("/favicon.ico", http.NotFoundHandler())
+
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Path)
+	w.Header().Set("Content-Type", "text/html")
 	w.Write([]byte("hello index!"))
 }
 
 func fooHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Path)
 	w.Write([]byte("hello foo!"))
 }
 
 func bazzHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Path)
 	path := r.URL.Path
 	urlparam := strings.Split(path, "/foo/")[1]
 
@@ -75,8 +122,7 @@ func bazzHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(idparam)
-	w.Write([]byte("hello id = " + strconv.Itoa(idparam) + "!"))
+	w.Write([]byte("well, hello there id = " + strconv.Itoa(idparam) + "!"))
 }
 
 func barHandler(w http.ResponseWriter, r *http.Request) {
@@ -94,5 +140,27 @@ func barHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	fmt.Println(string(j))
+	w.Write([]byte("fetched: " + string(j)))
+}
+
+func getDoggo(w http.ResponseWriter, r *http.Request) {
+
+	type doggo struct {
+		Name  string
+		Breed string
+		Age   int
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	doggos := make([]doggo, 0)
+
+	for i := 0; i < 100; i++ {
+		doggos = append(doggos, doggo{"doggo" + strconv.Itoa(i), "mutt", i%6 + 1})
+	}
+
+	json, err := json.Marshal(doggos)
+	if err != nil {
+		log.Println(err)
+	}
+	w.Write(json)
 }
