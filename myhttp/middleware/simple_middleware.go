@@ -15,7 +15,7 @@ import (
 
 type middleware func(http.Handler) http.Handler
 
-func useGZipMiddleware() middleware {
+func useGZipMiddleware() middleware { // TODO encode with gzip only if response is bigger than 1400B
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			log.Println("before gzip")
