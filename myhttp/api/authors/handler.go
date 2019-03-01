@@ -7,23 +7,29 @@ import (
 	"strings"
 )
 
-// HandleAuthors handle requests to authors model.
+// HandleAuthors handle requests to the /api/v1/authors route.
 func HandleAuthors(w http.ResponseWriter, r *http.Request) {
+	switch {
+	case r.Method == http.MethodGet:
+		getAllAuthors(w, r)
+		return
+	case r.Method == http.MethodPost:
+		createAuthor(w, r)
+		return
+	}
+
+	log.Println("error: author ", http.StatusMethodNotAllowed)
+	http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+	return
+}
+
+// HandleAuthor handle requests to the /api/v1/authors/ route.
+func HandleAuthor(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	urlparam := strings.Split(path, "/api/v1/authors/")[1]
 
 	if urlparam == "" {
-		switch {
-		case r.Method == http.MethodGet:
-			getAllAuthors(w, r)
-			return
-		case r.Method == http.MethodPost:
-			createAuthor(w, r)
-			return
-		}
-
-		log.Println("error: author ", http.StatusMethodNotAllowed)
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		HandleAuthors(w, r)
 		return
 	}
 
