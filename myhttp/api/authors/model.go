@@ -59,7 +59,7 @@ func updateAuthor(w http.ResponseWriter, r *http.Request, id int) {
 	}
 	if rows != 1 {
 		log.Println("No rows updated.")
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
 
@@ -83,7 +83,7 @@ func deleteAuthor(w http.ResponseWriter, r *http.Request, id int) {
 	}
 	if rows != 1 {
 		log.Println("No rows deleted.")
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
 
@@ -131,7 +131,7 @@ func createAuthor(w http.ResponseWriter, r *http.Request) {
 	}
 	if rows != 1 {
 		log.Println("No rows inserted.")
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
 
@@ -188,7 +188,7 @@ func getAuthorByID(w http.ResponseWriter, r *http.Request, id int) {
 	switch {
 	case err == sql.ErrNoRows:
 		log.Print(err)
-		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		http.NotFound(w, r)
 		return
 	case err != nil:
 		log.Print(err)
