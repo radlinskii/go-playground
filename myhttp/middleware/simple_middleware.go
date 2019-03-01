@@ -15,7 +15,7 @@ import (
 
 type middleware func(http.Handler) http.Handler
 
-func useGZipMiddleware() middleware { // TODO encode with gzip only if response is bigger than 1400B
+func useGZipMiddleware() middleware {
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			log.Println("before gzip")
@@ -44,7 +44,13 @@ type gzipResponseWriter struct {
 
 func (grw gzipResponseWriter) Write(data []byte) (int, error) {
 	log.Println("gzip")
-	return grw.Writer.Write(data)
+	log.Println(len(data))
+	if len(data) > 1400 {
+		return grw.Writer.Write(data)
+	}
+	grw.Header().Del("Content-Encoding")
+	grw.Header().Add("Content-Length", strconv.Itoa(len(data)))
+	return grw.ResponseWriter.Write(data)
 }
 
 func useDurationMiddleware() middleware {
@@ -154,7 +160,7 @@ func getDoggo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	doggos := make([]doggo, 0)
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 33; i++ { // test gzip with 33 | 34 iterations
 		doggos = append(doggos, doggo{"doggo" + strconv.Itoa(i), "mutt", i%6 + 1})
 	}
 
