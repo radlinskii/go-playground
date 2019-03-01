@@ -188,7 +188,7 @@ func getAuthorByID(w http.ResponseWriter, r *http.Request, id int) {
 	switch {
 	case err == sql.ErrNoRows:
 		log.Print(err)
-		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		http.NotFound(w, r)
 		return
 	case err != nil:
 		log.Print(err)

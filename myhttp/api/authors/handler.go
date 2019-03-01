@@ -29,14 +29,14 @@ func HandleAuthor(w http.ResponseWriter, r *http.Request) {
 	urlparam := strings.Split(path, "/api/v1/authors/")[1]
 
 	if urlparam == "" {
-		HandleAuthors(w, r)
+		http.Redirect(w, r, "/api/v1/authors", http.StatusSeeOther)
 		return
 	}
 
 	idparam, err := strconv.Atoi(urlparam)
 	if err != nil {
 		log.Println(err)
-		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		http.NotFound(w, r)
 		return
 	}
 

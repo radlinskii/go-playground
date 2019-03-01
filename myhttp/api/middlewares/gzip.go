@@ -24,7 +24,7 @@ func UseGZip() Middleware {
 				ResponseWriter: w,
 				Writer:         gw,
 			}
-			h.ServeHTTP(grw, r)
+			h.ServeHTTP(&grw, r)
 		})
 	}
 }
@@ -32,10 +32,19 @@ func UseGZip() Middleware {
 type gzipResponseWriter struct {
 	http.ResponseWriter
 	io.Writer
+	status int
 }
 
-func (grw gzipResponseWriter) Write(data []byte) (int, error) {
-	if len(data) > 1400 {
+func (grw *gzipResponseWriter) WriteHeader(statusCode int) {
+	grw.status = statusCode
+	if grw.status == 0 {
+		grw.status = 200
+	}
+	grw.ResponseWriter.WriteHeader(statusCode)
+}
+
+func (grw *gzipResponseWriter) Write(data []byte) (int, error) {
+	if len(data) > 1400 || grw.status >= 400 {
 		return grw.Writer.Write(data)
 	}
 	grw.Header().Del("Content-Encoding")
